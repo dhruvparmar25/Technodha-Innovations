@@ -1,6 +1,4 @@
-
 import React from 'react';
-
 const ForgotPasswordForm = ({ forgotEmail, setForgotEmail, forgotErrors, handleSubmit, switchToLogin }) => {
   return (
     <form onSubmit={handleSubmit}>
@@ -29,7 +27,7 @@ const ForgotPasswordForm = ({ forgotEmail, setForgotEmail, forgotErrors, handleS
       <button 
         type="button" 
         className="secondary-button" 
-        onClick={switchToLogin} // Prop call
+        onClick={switchToLogin}
       >
         Back to Login
       </button>

@@ -1,6 +1,5 @@
-// components/DoctorSignupForm.jsx
 import React from 'react';
-import { FaAngleLeft } from "react-icons/fa"; // Import a better icon for back arrow
+import { FaAngleLeft } from "react-icons/fa"; 
 
 const DoctorSignupForm = ({
   formData,
@@ -12,14 +11,12 @@ const DoctorSignupForm = ({
 }) => {
   return (
     <form onSubmit={handleSubmit}>
-      {/* Step Indicator (as shown in the image) */}
       <div className="step-indicator">
-        <div className="back-arrow" onClick={switchToSignupStep1}> {/* UPDATED CLICK HANDLER */}
+        <div className="back-arrow" onClick={switchToSignupStep1}> 
           <FaAngleLeft size={20} color="#7C3AED" />
         </div>
         <p>Step 2 of 2 — Professional Details</p>
         <div className="progress-bar-container">
-             {/* Progress bar set to 100% for Step 2 */}
             <div className="progress-bar step-2"></div>
         </div>
       </div>

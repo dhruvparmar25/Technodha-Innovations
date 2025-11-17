@@ -1,13 +1,10 @@
-// pages/DoctorAuthPage.jsx
 import React, { useState } from "react";
-// Import all components
 import AuthLayout from "../components/AuthLayout";
 import LoginForm from "../components/LoginForm";
 import ForgotPasswordForm from "../components/ForgotPasswordForm";
-import DoctorSignupForm from "../components/DoctorSignupForm"; // Step 2
-import DoctorSignupStep1 from "../components/DoctorSignupStep1"; // Step 1
+import DoctorSignupForm from "../components/DoctorSignupForm";
+import DoctorSignupStep1 from "../components/DoctorSignupStep1";
 
-// Centralized validation helper
 const validateEmail = (email) => {
     const re =
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -16,7 +13,7 @@ const validateEmail = (email) => {
 
 const DoctorAuthPage = () => {
     // --- Common States ---
-    const [viewMode, setViewMode] = useState('login'); // 'login', 'forgotPassword', 'signupStep1', 'signupStep2'
+    const [viewMode, setViewMode] = useState('login'); 
     const [showPassword, setShowPassword] = useState({ create: false, confirm: false, login: false });
 
     // --- Login States ---
@@ -130,8 +127,8 @@ const DoctorAuthPage = () => {
     const handleSignupStep1Submit = (e) => {
         e.preventDefault();
         if (validateSignupStep1()) {
-            setViewMode('signupStep2'); // Move to the next step
-            setSignupStep1Errors({}); // Clear errors upon success
+            setViewMode('signupStep2'); 
+            setSignupStep1Errors({}); 
         }
     }
 
@@ -169,15 +166,15 @@ const DoctorAuthPage = () => {
     };
 
     const switchToSignupStep1 = (e) => {
-        e.preventDefault(); // Prevent default link behavior
+        e.preventDefault(); 
         setViewMode('signupStep1');
         setErrors({}); 
     }
 
-    // FIX: This function is now correctly passed to and used by Step 2 component
+
     const switchToSignupStep1FromStep2 = () => {
         setViewMode('signupStep1');
-        setSignupStep2Errors({}); // Clear step 2 errors if going back
+        setSignupStep2Errors({}); 
     }
     
     const togglePasswordVisibility = (field) => {
@@ -189,7 +186,6 @@ const DoctorAuthPage = () => {
     };
 
 
-    // --- Conditional Content (Props) ---
     let title = "";
     let subtitle = "";
     let formContent;

@@ -1,12 +1,9 @@
-// components/LoginForm.jsx
 import React from 'react';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
-// Add switchToSignup to props
 const LoginForm = ({ email, setEmail, password, setPassword, errors, handleSubmit, showPassword, togglePasswordVisibility, switchToForgot, switchToSignup }) => {
 	return (
 		<form onSubmit={handleSubmit}>
-			{/* Email Input Group */}
 			<div className="form-group">
 				<label htmlFor="email" className="form-label">Email</label>
 				<input
@@ -21,8 +18,6 @@ const LoginForm = ({ email, setEmail, password, setPassword, errors, handleSubmi
 					<div className="validation-error">{errors.email}</div>
 				)}
 			</div>
-
-			{/* Password Input with Toggle */}
 			<div className="form-group password-group">
 				<label htmlFor="password" className="form-label">Password</label>
 				<div className="input-with-icon-container">
@@ -50,8 +45,6 @@ const LoginForm = ({ email, setEmail, password, setPassword, errors, handleSubmi
 					<div className="validation-error">{errors.password}</div>
 				)}
 			</div>
-			
-			{/* Options Row (Remember Me / Forgot Password) */}
 			<div className="form-options-row">
 				<div className="form-check-group">
 					<input
@@ -63,11 +56,10 @@ const LoginForm = ({ email, setEmail, password, setPassword, errors, handleSubmi
 						Remember me
 					</label>
 				</div>
-				{/* Switch View Handler (passed as a prop) */}
 				<a	
 					href="#"	
 					className="forgot-password-link"	
-					onClick={switchToForgot} // Prop call
+					onClick={switchToForgot} 
 				>
 					Forgot password?
 				</a>
@@ -82,7 +74,7 @@ const LoginForm = ({ email, setEmail, password, setPassword, errors, handleSubmi
 				<a 
                     href="/signup" 
                     className="signup-link"
-                    onClick={switchToSignup} // UPDATED: Use the prop for view switch
+                    onClick={switchToSignup}
                 >
 					Sign Up
 				</a>

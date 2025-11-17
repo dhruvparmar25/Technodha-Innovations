@@ -1,4 +1,3 @@
-// components/DoctorSignupStep1.jsx
 import React from 'react';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
@@ -11,18 +10,13 @@ const DoctorSignupStep1 = ({
     showPassword,
     togglePasswordVisibility 
 }) => {
-    return (<>  
-    
+    return (<>    
           <form onSubmit={handleSubmit}>
-
-            {/* Step Indicator (as shown in the image) */}
             <div className="step-indicator">
                 <div className="back-arrow" onClick={switchToLogin}>
-                    {/* Assuming you have an SVG or image for the back arrow */}
                     <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#7C3AED' viewBox='0 0 16 16'><path fillRule='evenodd' d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/></svg>
                 </div>
                 <p>Step 1 of 2 — Basic Details</p>
-                {/* Progress bar set to 50% for Step 1 */}
                 <div className="progress-bar-container">
                      <div className="progress-bar step-1"></div>
                 </div>
@@ -47,7 +41,6 @@ const DoctorSignupStep1 = ({
                     <div className="validation-error">{errors.email}</div>
                 )}
             </div>
-
             {/* Create Password Input */}
             <div className="form-group password-group">
                 <label htmlFor="createPassword" className="form-label">Create Password</label>
