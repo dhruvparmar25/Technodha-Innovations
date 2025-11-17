@@ -1,4 +1,4 @@
-// components/LoginForm.jsx
+
 import React from 'react';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
@@ -77,9 +77,9 @@ const LoginForm = ({ email, setEmail, password, setPassword, errors, handleSubmi
       </button>
 
       <div className="toggel-btn">
-        Don't have an account?
+        Don't have an account ?  
         <a href="/signup" className="signup-link">
-          **Sign Up**
+          Sign Up
         </a>
       </div>
     </form>

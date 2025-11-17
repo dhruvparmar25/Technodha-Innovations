@@ -1,4 +1,4 @@
-// components/ForgotPasswordForm.jsx
+
 import React from 'react';
 
 const ForgotPasswordForm = ({ forgotEmail, setForgotEmail, forgotErrors, handleSubmit, switchToLogin }) => {

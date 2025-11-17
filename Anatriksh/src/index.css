@@ -1,3 +1,7 @@
+body{
+     font-family: "Manrope", sans-serif;
+
+}
 .auth{
     margin: 0%;
     padding: 0%;
@@ -23,10 +27,34 @@ background-position: center;
 .form-group {
     display: flex;
     flex-direction: column;
+    margin-top: 16px;
+}
+.form-group label{
+color: #1E1B4B;
+}
+.form-box {
+max-width: 484px;
+}
+.form-title h1{
+     font-family: "Manrope", sans-serif;
+    font-size: 36px;
+    color: #7C3AED;
+    
+}
+.form-title p{
+    font-family: "Manrope", sans-serif;
+    font-size: 16px;
+    color: #6B728E;
+        padding-right: 13px;
 }
 .form-options-row{
     display: flex;
     justify-content: space-between;
+    margin-top: 5px;
+}
+.form-options-row a,.toggel-btn a{
+    text-decoration: none;
+    color: #7C3AED;
 }
 .input-with-icon-container {
     position: relative;
@@ -39,7 +67,17 @@ background-position: center;
     width: 100%;
     padding-right: 40px;
 }
-
+.form-input{
+    padding: 10px;
+    border: none;
+    background-color: #F6F5FA;
+    /* color: #E5E0F0; */
+    border-radius: 10px;
+}
+.form-input:focus {
+    border: 1px solid #E5E0F0 !important; /* Sirf testing ke liye */
+    outline: none;
+}
 .password-toggle-button {
     position: absolute;
     right: 10px;
@@ -51,4 +89,32 @@ background-position: center;
     padding: 0;
     z-index: 10;
     color: #666;
+}
+.form-check-group {
+    display: flex;
+    gap: 10px;
+}
+.form-check-group label{
+    color: #6B728E;
+}
+.submit-button{
+    width: 100%;
+    margin-top: 49px;
+    padding: 10px;
+    border: none;
+    background-color: #7C3AED;
+    color: white;
+    border-radius: 10px;
+}
+.secondary-button{
+     width: 100%;
+    padding: 10px;
+    border: none;
+  background-color: white;
+  color: #7C3AED;
+  
+}
+.toggel-btn{
+    text-align: center;
+    margin-top: 18px;
 }
