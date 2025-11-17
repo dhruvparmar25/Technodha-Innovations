@@ -39,11 +39,13 @@ body {
 }
 .form-box {
   max-width: 484px;
-  width: 100%;
+    max-height: 720px;
+    width: 100%;
+    overflow-y: scroll;
 }
 .form-title h1 {
   font-family: "Manrope", sans-serif;
-  font-size: 36px;
+  font-size: 34px;
   color: #7c3aed;
 }
 .form-title p {
@@ -132,7 +134,7 @@ body {
 }
 .toggel-btn {
   text-align: center;
-  /* margin-top: 18px; */
+  margin: 5px 0px;
 }
 .validation-error {
   color: red;
@@ -203,9 +205,7 @@ body {
   width: 100%;
 }
 
-.continue-button {
-  margin-top: 50px;
-}
+
 
 .save-profile-button {
   background-color: #9333ea;
@@ -235,13 +235,5 @@ body {
     overflow-y: visible;
   }
 
-  .form-box {
-    padding: 0px;
-    margin: 0 auto;
-    
-  }
-    .form-box form {
-    overflow: scroll;
-    max-height: 80vh;
-}
+
 }
