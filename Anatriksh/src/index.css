@@ -118,3 +118,31 @@ max-width: 484px;
     text-align: center;
     margin-top: 18px;
 }
+@media (max-width: 1024px) {
+    .auth {
+        flex-direction: column; 
+        height: auto; 
+    }
+    
+    .auth-img {
+        width: 100%; 
+        height: 250px; 
+        padding: 20px;
+        background-position: bottom; 
+    }
+    
+    .logo {
+        padding: 0;
+        text-align: center;
+    }
+    
+    .auth-form {
+        width: 100%; 
+        padding: 20px;
+        margin: 0; 
+    }
+    
+    .form-box {
+        padding: 10px;
+        margin: 0 auto; 
+}}
