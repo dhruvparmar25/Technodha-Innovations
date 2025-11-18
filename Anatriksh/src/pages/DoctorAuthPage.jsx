@@ -252,6 +252,9 @@ const DoctorAuthPage = ({ mode }) => {
         forgotErrors={forgotErrors}
         handleSubmit={handleForgotSubmit}
         switchToLogin={switchToLogin}
+          setForgotErrors={setForgotErrors}  // ✔ नया required prop
+
+
       />
     );
   }

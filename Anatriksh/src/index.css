@@ -3,10 +3,12 @@
   --color-text-primary: #1E1B4B;    
   --color-text-secondary: #6B728E;  
   --color-text-white: white;       
-  --color-error: red;             
+  --color-error: red;   
+  --color--link: #06B6D4;
+         
 
   /* Main Action Colors */
-  --color-primary: #7C3AED;         
+  --color-primary: #5d00ff;         
   --color-primary-dark: #6D28D9;   
   --color-primary-save: #9333EA;    
 
@@ -87,6 +89,7 @@ body {
   font-size: 16px;
   color: var(--color-text-secondary);
   padding-right: 13px;
+  margin: 0%;
 }
 
 .form-options-row {
@@ -265,7 +268,22 @@ a, .active, .inactive {
     font-size: 16px;
   color: var(--color-text-secondary);
 }
-
+.otp-box {
+  width: 45px;
+  height: 45px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+}
+.otp-box:focus {
+  outline: none;
+  border: 2px solid var(--color-primary);
+}
+.email a{
+  color: var(--color--link);
+}
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 1024px) {

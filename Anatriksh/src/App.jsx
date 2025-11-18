@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import DoctorAuthPage from "./pages/DoctorAuthPage";
+import OtpVerificationPage from "./components/auth/OtpVerificationPage";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Route path="/signup" element={<DoctorAuthPage mode="signupStep1" />} />
       <Route path="/signup/step2" element={<DoctorAuthPage mode="signupStep2" />} />
       <Route path="/signup/success" element={<DoctorAuthPage mode="signupSuccess" />} />
+<Route path="/forgot/verify-otp" element={<OtpVerificationPage />} />
 
 
       {/* Forgot Password */}
