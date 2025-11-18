@@ -4,12 +4,12 @@
   --color-text-secondary: #6B728E;  
   --color-text-white: white;       
   --color-error: red;             
+
   /* Main Action Colors */
   --color-primary: #7C3AED;         
   --color-primary-dark: #6D28D9;   
   --color-primary-save: #9333EA;    
-  
-  /* User requested, currently unused in this file: */
+
   --color-secondary: #06B6D4;      
   --color-accent: #FF6B6B;          
 
@@ -22,72 +22,86 @@
 
 body {
   font-family: "Manrope", sans-serif;
-
 }
+
+/* ---------- AUTH LAYOUT ---------- */
 .auth {
   min-height: 100vh;
-  margin: 0%;
-  padding: 0%;
   width: 100%;
   display: flex;
-  overflow: hidden;
+  overflow: hidden; /* Keep whole layout fixed */
 }
+
 .auth-img {
   width: 50%;
   background-color: var(--color-bg-main);
- 
+  overflow: hidden; /* ✔ Left image stays fixed */
 }
-.bg-img img{
+
+.bg-img img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+
+/* Logo */
 .logo {
   padding: 40px 0px 0px 50px;
 }
+
+/* ---------- RIGHT SIDE FORM ---------- */
 .auth-form {
   width: 50%;
-  margin: auto;
+  height: 100vh;       /* ✔ Right section gets full height */
+  overflow-y: auto;    /* ✔ Only right side scrolls */
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   padding: 30px;
-  overflow-y: auto;
 }
 
+.form-box {
+  max-width: 484px;
+  width: 100%;
+  margin: auto;
+  /* overflow-y: scroll; ❌ Removed double scrollbar */
+}
+
+/* ---------- FORM ELEMENTS ---------- */
 .form-group {
   display: flex;
   flex-direction: column;
   margin-top: 12px;
 }
+
 .form-group label {
   color: var(--color-text-primary);
 }
-.form-box {
-  max-width: 484px;
-  max-height: 720px;
-  width: 100%;
-  overflow-y: scroll;
-}
+
 .form-title h1 {
-  font-family: "Manrope", sans-serif;
   font-size: 34px;
   color: var(--color-primary);
 }
+
 .form-title p {
-  font-family: "Manrope", sans-serif;
   font-size: 16px;
   color: var(--color-text-secondary);
   padding-right: 13px;
 }
+
 .form-options-row {
   display: flex;
   justify-content: space-between;
   margin-top: 5px;
 }
-.form-options-row a,
-.toggel-btn a {
-  text-decoration: none;
+
+a, .active, .inactive {
   color: var(--color-primary);
+  text-decoration: none;
 }
+
+
+/* Input with icon */
 .input-with-icon-container {
   position: relative;
   display: flex;
@@ -99,16 +113,20 @@ body {
   width: 100%;
   padding-right: 40px;
 }
+
 .form-input {
   padding: 10px;
   border: none;
   background-color: var(--color-bg-input);
   border-radius: 10px;
 }
+
 .form-input:focus {
   border: 1px solid var(--color-border) !important;
   outline: none;
 }
+
+/* Password toggle */
 .password-toggle-button {
   position: absolute;
   right: 10px;
@@ -119,15 +137,19 @@ body {
   cursor: pointer;
   padding: 0;
   z-index: 10;
-  color: #666; /* Kept the original gray for stability */
+  color: #666;
 }
+
 .form-check-group {
   display: flex;
   gap: 10px;
 }
+
 .form-check-group label {
   color: var(--color-text-secondary);
 }
+
+/* Submit Button */
 .submit-button {
   width: 100%;
   margin-top: 16px;
@@ -138,13 +160,17 @@ body {
   border-radius: 10px;
   transition: background-color 0.3s;
 }
+
 .submit-button:hover:not(:disabled) {
   background-color: var(--color-primary-dark);
 }
+
 .submit-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
+
+/* Secondary button */
 .secondary-button {
   width: 100%;
   padding: 12px;
@@ -155,35 +181,33 @@ body {
   border-radius: 10px;
   transition: background-color 0.3s;
 }
+
 .toggel-btn {
   text-align: center;
   margin: 5px 0px;
 }
+
 .validation-error {
   color: var(--color-error);
   padding: 8px;
 }
 
-/* --- Signup Form Specific Styling --- */
+/* ---------- SIGNUP STEP PROGRESS ---------- */
 .step-indicator {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: start;
   gap: 10px;
   font-size: 14px;
   color: var(--color-text-secondary);
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: start;
 }
+
 .step-indicator p {
   margin-bottom: 0 !important;
-  flex-grow: 1;
-  text-align: center;
   font-weight: 500;
   color: var(--color-text-secondary);
 }
+
 .back-arrow {
   cursor: pointer;
   width: 35px;
@@ -195,10 +219,11 @@ body {
   justify-content: center;
 }
 
-/* Container for Progress Bar to fix width */
+/* Progress bar */
 .progress-bar-container {
   width: 100%;
 }
+
 .progress-bar {
   height: 13px;
   border-radius: 10px;
@@ -217,12 +242,10 @@ body {
   transition: width 0.3s ease;
 }
 
-/* Step 1: 50% Progress */
 .progress-bar.step-1::after {
   width: 50%;
 }
 
-/* Step 2: 100% Progress */
 .progress-bar.step-2::after {
   width: 100%;
 }
@@ -230,6 +253,8 @@ body {
 .save-profile-button {
   background-color: var(--color-primary-save);
 }
+
+/* ---------- RESPONSIVE ---------- */
 @media (max-width: 1024px) {
   .auth {
     flex-direction: column;
@@ -250,10 +275,8 @@ body {
 
   .auth-form {
     width: 100%;
-    padding: 30px 20px;
-    margin: 0;
+    height: auto; /* ✔ Prevents unexpected scroll issue on mobile */
     overflow-y: visible;
+    padding: 30px 20px;
   }
-
-
 }
