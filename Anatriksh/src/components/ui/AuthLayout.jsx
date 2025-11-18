@@ -8,6 +8,10 @@ const AuthLayout = ({ title, subtitle, children }) => {
        <div className="logo">
         <img src="logo.png" alt="" />
        </div>
+       <div className="bg-img">
+       <img src="Background-img.png" />
+
+       </div>
 
       </div>
 

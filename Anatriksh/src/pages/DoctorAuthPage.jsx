@@ -1,11 +1,11 @@
 import React, { useState} from "react";
 import { useNavigate } from "react-router-dom";
-import AuthLayout from "../components/AuthLayout";
-import LoginForm from "../components/LoginForm";
-import ForgotPasswordForm from "../components/ForgotPasswordForm";
-import DoctorSignupForm from "../components/DoctorSignupForm";
-import DoctorSignupStep1 from "../components/DoctorSignupStep1";
-import AlertBox from "../components/AlertBox";
+import AuthLayout from "../components/ui/AuthLayout";
+import LoginForm from "../components/auth/LoginForm";
+import ForgotPasswordForm from "../components/auth/ForgotPasswordForm";
+import DoctorSignupForm from "../components/auth/DoctorSignupForm";
+import DoctorSignupStep1 from "../components/auth/DoctorSignupStep1";
+import AlertBox from "../components/ui/AlertBox";
 
 const validateEmail = (email) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/.test(email);
 const validateName = (name) => /^[A-Za-z ]{3,30}$/.test(name);

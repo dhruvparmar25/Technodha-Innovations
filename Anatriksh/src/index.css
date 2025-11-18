@@ -14,7 +14,7 @@
   --color-accent: #FF6B6B;          
 
   /* Backgrounds & Borders */
-  --color-bg-main: #BBBBBB;        
+  --color-bg-main: #7C3AED1F;        
   --color-bg-accent: #EFE7FD;      
   --color-bg-input: #F6F5FA;       
   --color-border: #E5E0F0;        
@@ -35,9 +35,10 @@ body {
 .auth-img {
   width: 50%;
   background-color: var(--color-bg-main);
-  background-image: url("Background-img.png");
-  background-repeat: no-repeat;
-  background-position: center;
+ 
+}
+.bg-img img{
+  width: 100%;
 }
 .logo {
   padding: 40px 0px 0px 50px;
