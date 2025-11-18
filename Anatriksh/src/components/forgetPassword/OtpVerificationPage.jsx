@@ -20,7 +20,7 @@ const OtpVerificationPage = () => {
     const code = otp.join("");
 
     if (code.length === 6) {
-      navigate("/reset-password");
+      navigate("/forget/success");
     }
   };
 
