@@ -38,7 +38,7 @@ body {
   overflow: hidden; /* ✔ Left image stays fixed */
 }
 
-.bg-img img {
+.bg-img img,.suc-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -64,7 +64,7 @@ body {
   max-width: 484px;
   width: 100%;
   margin: auto;
-  /* overflow-y: scroll; ❌ Removed double scrollbar */
+  
 }
 
 /* ---------- FORM ELEMENTS ---------- */
@@ -253,6 +253,19 @@ a, .active, .inactive {
 .save-profile-button {
   background-color: var(--color-primary-save);
 }
+.success-container{
+  text-align: center;
+  /* padding: 50px 30px; */
+}
+.success-container h2{
+   font-size: 32px;
+  color: var(--color-primary);
+}
+.success-container p{
+    font-size: 16px;
+  color: var(--color-text-secondary);
+}
+
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 1024px) {
@@ -275,7 +288,7 @@ a, .active, .inactive {
 
   .auth-form {
     width: 100%;
-    height: auto; /* ✔ Prevents unexpected scroll issue on mobile */
+    height: auto; 
     overflow-y: visible;
     padding: 30px 20px;
   }

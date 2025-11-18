@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../components/ui/AuthLayout";
 import LoginForm from "../components/auth/LoginForm";
@@ -6,18 +6,19 @@ import ForgotPasswordForm from "../components/auth/ForgotPasswordForm";
 import DoctorSignupForm from "../components/auth/DoctorSignupForm";
 import DoctorSignupStep1 from "../components/auth/DoctorSignupStep1";
 import AlertBox from "../components/ui/AlertBox";
+import DoctorSignupSuccess from "../components/auth/DoctorSignupSuccess";
 
-const validateEmail = (email) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/.test(email);
+const validateEmail = (email) =>
+  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/.test(email);
 const validateName = (name) => /^[A-Za-z ]{3,30}$/.test(name);
 const validateLicense = (id) => /^[A-Z0-9-]{5,20}$/.test(id);
 const validateContact = (num) => /^[0-9]{10}$/.test(num);
 
 const DoctorAuthPage = ({ mode }) => {
   const navigate = useNavigate();
-const viewMode = mode || "login";
+  const viewMode = mode || "login";
 
   const [alert, setAlert] = useState({ type: "", message: "" });
-
 
   // --- Login States ---
   const [email, setEmail] = useState("");
@@ -60,12 +61,15 @@ const viewMode = mode || "login";
     let formErrors = {};
     let isValid = true;
 
-    if (!email.trim()) formErrors.email = "Email is required", (isValid = false);
-    else if (!validateEmail(email)) formErrors.email = "Invalid email", (isValid = false);
+    if (!email.trim())
+      (formErrors.email = "Email is required"), (isValid = false);
+    else if (!validateEmail(email))
+      (formErrors.email = "Invalid email"), (isValid = false);
 
-    if (!password) formErrors.password = "Password required", (isValid = false);
+    if (!password)
+      (formErrors.password = "Password required"), (isValid = false);
     else if (password.length < 6)
-      formErrors.password = "Min 6 characters", (isValid = false);
+      (formErrors.password = "Min 6 characters"), (isValid = false);
 
     setErrors(formErrors);
     return isValid;
@@ -76,9 +80,9 @@ const viewMode = mode || "login";
     let isValid = true;
 
     if (!forgotEmail.trim())
-      formErrors.forgotEmail = "Email required", (isValid = false);
+      (formErrors.forgotEmail = "Email required"), (isValid = false);
     else if (!validateEmail(forgotEmail))
-      formErrors.forgotEmail = "Invalid email", (isValid = false);
+      (formErrors.forgotEmail = "Invalid email"), (isValid = false);
 
     setForgotErrors(formErrors);
     return isValid;
@@ -89,13 +93,14 @@ const viewMode = mode || "login";
     let formErrors = {};
     let isValid = true;
 
-    if (!validateEmail(email)) formErrors.email = "Invalid email", (isValid = false);
+    if (!validateEmail(email))
+      (formErrors.email = "Invalid email"), (isValid = false);
 
     if (!createPassword || createPassword.length < 6)
-      formErrors.createPassword = "Min 6 characters", (isValid = false);
+      (formErrors.createPassword = "Min 6 characters"), (isValid = false);
 
     if (confirmPassword !== createPassword)
-      formErrors.confirmPassword = "Passwords must match", (isValid = false);
+      (formErrors.confirmPassword = "Passwords must match"), (isValid = false);
 
     setSignupStep1Errors(formErrors);
     return isValid;
@@ -106,13 +111,15 @@ const viewMode = mode || "login";
     let formErrors = {};
     let isValid = true;
 
-    if (!validateName(d.name)) formErrors.name = "Invalid name", (isValid = false);
-    if (!d.specialization) formErrors.specialization = "Required", (isValid = false);
-    if (!d.clinic.trim()) formErrors.clinic = "Required", (isValid = false);
+    if (!validateName(d.name))
+      (formErrors.name = "Invalid name"), (isValid = false);
+    if (!d.specialization)
+      (formErrors.specialization = "Required"), (isValid = false);
+    if (!d.clinic.trim()) (formErrors.clinic = "Required"), (isValid = false);
     if (!validateLicense(d.licenseNumber))
-      formErrors.licenseNumber = "Invalid license format", (isValid = false);
+      (formErrors.licenseNumber = "Invalid license format"), (isValid = false);
     if (!validateContact(d.contact))
-      formErrors.contact = "Must be 10 digits", (isValid = false);
+      (formErrors.contact = "Must be 10 digits"), (isValid = false);
 
     setSignupStep2Errors(formErrors);
     return isValid;
@@ -145,10 +152,11 @@ const viewMode = mode || "login";
 
   const handleSignupStep2Submit = (e) => {
     e.preventDefault();
+
     if (validateSignupStep2()) {
       setAlert({ type: "success", message: "Doctor account created!" });
 
-      setTimeout(() => navigate("/login"), 1000);
+      navigate("/signup/success");
     }
   };
 
@@ -235,8 +243,7 @@ const viewMode = mode || "login";
 
   if (viewMode === "forgotPassword") {
     title = "Reset Your Password";
-    subtitle =
-      "Enter your registered email and we will send you a reset link.";
+    subtitle = "Enter your registered email and we will send you a reset link.";
 
     formContent = (
       <ForgotPasswordForm
@@ -247,6 +254,12 @@ const viewMode = mode || "login";
         switchToLogin={switchToLogin}
       />
     );
+  }
+  if (viewMode === "signupSuccess") {
+    title = "";
+    subtitle ="";
+
+    formContent = <DoctorSignupSuccess />;
   }
 
   return (

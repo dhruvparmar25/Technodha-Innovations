@@ -6,10 +6,10 @@ const AuthLayout = ({ title, subtitle, children }) => {
       {/* Left Side: Fixed Image/Logo */}
       <div className="auth-img">
        <div className="logo">
-        <img src="logo.png" alt="" />
+        <img src="/logo.png" alt="" />
        </div>
        <div className="bg-img">
-       <img src="Background-img.png" />
+       <img src="/Background-img.png" />
 
        </div>
 

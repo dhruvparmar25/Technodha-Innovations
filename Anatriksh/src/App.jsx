@@ -11,6 +11,8 @@ function App() {
       <Route path="/login" element={<DoctorAuthPage mode="login" />} />
       <Route path="/signup" element={<DoctorAuthPage mode="signupStep1" />} />
       <Route path="/signup/step2" element={<DoctorAuthPage mode="signupStep2" />} />
+      <Route path="/signup/success" element={<DoctorAuthPage mode="signupSuccess" />} />
+
 
       {/* Forgot Password */}
       <Route path="/forgot" element={<DoctorAuthPage mode="forgotPassword" />} />
