@@ -1,5 +1,28 @@
+:root {
+  /* Text & Primary Elements */
+  --color-text-primary: #1E1B4B;    
+  --color-text-secondary: #6B728E;  
+  --color-text-white: white;       
+  --color-error: red;             
+  /* Main Action Colors */
+  --color-primary: #7C3AED;         
+  --color-primary-dark: #6D28D9;   
+  --color-primary-save: #9333EA;    
+  
+  /* User requested, currently unused in this file: */
+  --color-secondary: #06B6D4;      
+  --color-accent: #FF6B6B;          
+
+  /* Backgrounds & Borders */
+  --color-bg-main: #BBBBBB;        
+  --color-bg-accent: #EFE7FD;      
+  --color-bg-input: #F6F5FA;       
+  --color-border: #E5E0F0;        
+}
+
 body {
   font-family: "Manrope", sans-serif;
+
 }
 .auth {
   min-height: 100vh;
@@ -11,7 +34,7 @@ body {
 }
 .auth-img {
   width: 50%;
-  background-color: #efe7fd;
+  background-color: var(--color-bg-main);
   background-image: url("Background-img.png");
   background-repeat: no-repeat;
   background-position: center;
@@ -35,23 +58,23 @@ body {
   margin-top: 12px;
 }
 .form-group label {
-  color: #1e1b4b;
+  color: var(--color-text-primary);
 }
 .form-box {
   max-width: 484px;
-    max-height: 720px;
-    width: 100%;
-    overflow-y: scroll;
+  max-height: 720px;
+  width: 100%;
+  overflow-y: scroll;
 }
 .form-title h1 {
   font-family: "Manrope", sans-serif;
   font-size: 34px;
-  color: #7c3aed;
+  color: var(--color-primary);
 }
 .form-title p {
   font-family: "Manrope", sans-serif;
   font-size: 16px;
-  color: #6b728e;
+  color: var(--color-text-secondary);
   padding-right: 13px;
 }
 .form-options-row {
@@ -62,7 +85,7 @@ body {
 .form-options-row a,
 .toggel-btn a {
   text-decoration: none;
-  color: #7c3aed;
+  color: var(--color-primary);
 }
 .input-with-icon-container {
   position: relative;
@@ -78,12 +101,11 @@ body {
 .form-input {
   padding: 10px;
   border: none;
-  background-color: #f6f5fa;
-  /* color: #E5E0F0; */
+  background-color: var(--color-bg-input);
   border-radius: 10px;
 }
 .form-input:focus {
-  border: 1px solid #e5e0f0 !important; /* Sirf testing ke liye */
+  border: 1px solid var(--color-border) !important;
   outline: none;
 }
 .password-toggle-button {
@@ -96,27 +118,27 @@ body {
   cursor: pointer;
   padding: 0;
   z-index: 10;
-  color: #666;
+  color: #666; /* Kept the original gray for stability */
 }
 .form-check-group {
   display: flex;
   gap: 10px;
 }
 .form-check-group label {
-  color: #6b728e;
+  color: var(--color-text-secondary);
 }
 .submit-button {
   width: 100%;
   margin-top: 16px;
   padding: 12px;
   border: none;
-  background-color: #7c3aed;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--color-text-white);
   border-radius: 10px;
   transition: background-color 0.3s;
 }
 .submit-button:hover:not(:disabled) {
-  background-color: #6d28d9;
+  background-color: var(--color-primary-dark);
 }
 .submit-button:disabled {
   opacity: 0.7;
@@ -125,9 +147,9 @@ body {
 .secondary-button {
   width: 100%;
   padding: 12px;
-  border: 1px solid #7c3aed;
-  background-color: white;
-  color: #7c3aed;
+  border: 1px solid var(--color-primary);
+  background-color: var(--color-text-white);
+  color: var(--color-primary);
   margin-top: 15px;
   border-radius: 10px;
   transition: background-color 0.3s;
@@ -137,19 +159,18 @@ body {
   margin: 5px 0px;
 }
 .validation-error {
-  color: red;
+  color: var(--color-error);
   padding: 8px;
 }
 
 /* --- Signup Form Specific Styling --- */
-/* This is for the "Step 2 of 2" section in the image */
 .step-indicator {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
   font-size: 14px;
-  color: #6b728e;
+  color: var(--color-text-secondary);
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -160,14 +181,14 @@ body {
   flex-grow: 1;
   text-align: center;
   font-weight: 500;
-  color: #6b728e;
+  color: var(--color-text-secondary);
 }
 .back-arrow {
   cursor: pointer;
-  width: 35px; /* Increased size to fit the <FaAngleLeft> icon */
+  width: 35px;
   height: 35px;
   border-radius: 50%;
-  border: 1px solid #e5e0f0;
+  border: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -180,7 +201,7 @@ body {
 .progress-bar {
   height: 13px;
   border-radius: 10px;
-  background-color: #e5e0f0;
+  background-color: var(--color-border);
   position: relative;
   overflow: hidden;
 }
@@ -191,7 +212,7 @@ body {
   top: 0;
   left: 0;
   height: 100%;
-  background-color: #7c3aed; /* Purple color for progress */
+  background-color: var(--color-primary);
   transition: width 0.3s ease;
 }
 
@@ -205,10 +226,8 @@ body {
   width: 100%;
 }
 
-
-
 .save-profile-button {
-  background-color: #9333ea;
+  background-color: var(--color-primary-save);
 }
 @media (max-width: 1024px) {
   .auth {
