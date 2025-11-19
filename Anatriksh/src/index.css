@@ -1,29 +1,30 @@
 :root {
-  /* Text & Primary Elements */
-  --color-text-primary: #1E1B4B;    
-  --color-text-secondary: #6B728E;  
-  --color-text-white: white;       
-  --color-error: red;   
+  /* ---------- COLORS ---------- */
+  --color-text-primary: #1E1B4B;
+  --color-text-secondary: #6B728E;
+  --color-text-white: white;
+  --color-error: red;
   --color--link: #06B6D4;
-         
 
-  /* Main Action Colors */
-  --color-primary: #5d00ff;         
-  --color-primary-dark: #6D28D9;   
-  --color-primary-save: #9333EA;    
+  --color-primary: #5d00ff;
+  --color-primary-dark: #6D28D9;
+  --color-primary-save: #9333EA;
 
-  --color-secondary: #06B6D4;      
-  --color-accent: #FF6B6B;          
+  --color-secondary: #06B6D4;
+  --color-accent: #FF6B6B;
 
-  /* Backgrounds & Borders */
-  --color-bg-main: #7C3AED1F;        
-  --color-bg-accent: #EFE7FD;      
-  --color-bg-input: #F6F5FA;       
-  --color-border: #E5E0F0;        
+  --color-bg-main: #7C3AED1F;
+  --color-bg-accent: #EFE7FD;
+  --color-bg-input: #F6F5FA;
+  --color-border: #E5E0F0;
+
+  /* ---------- FONT VARIABLES ---------- */
+  --font-primary: "Urbanist", sans-serif;  /* Titles */
+  --font-secondary: "Manrope", sans-serif; /* Body text */
 }
 
 body {
-  font-family: "Manrope", sans-serif;
+  font-family: var(--font-secondary);
 }
 
 /* ---------- AUTH LAYOUT ---------- */
@@ -31,16 +32,17 @@ body {
   min-height: 100vh;
   width: 100%;
   display: flex;
-  overflow: hidden; /* Keep whole layout fixed */
+  overflow: hidden;
 }
 
 .auth-img {
   width: 50%;
   background-color: var(--color-bg-main);
-  overflow: hidden; /* ✔ Left image stays fixed */
+  overflow: hidden;
 }
 
-.bg-img img,.suc-img img {
+.bg-img img,
+.suc-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -54,8 +56,8 @@ body {
 /* ---------- RIGHT SIDE FORM ---------- */
 .auth-form {
   width: 50%;
-  height: 100vh;       /* ✔ Right section gets full height */
-  overflow-y: auto;    /* ✔ Only right side scrolls */
+  height: 100vh;
+  overflow-y: auto;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -66,7 +68,6 @@ body {
   max-width: 484px;
   width: 100%;
   margin: auto;
-  
 }
 
 /* ---------- FORM ELEMENTS ---------- */
@@ -78,18 +79,23 @@ body {
 
 .form-group label {
   color: var(--color-text-primary);
+  font-family: var(--font-secondary);
 }
 
+/* ------- TITLE FIXED FONT ------- */
 .form-title h1 {
   font-size: 34px;
   color: var(--color-primary);
+  font-family: var(--font-primary);   /* Urbanist */
 }
 
+/* ------- SUBTITLE FIXED FONT ------- */
 .form-title p {
   font-size: 16px;
   color: var(--color-text-secondary);
   padding-right: 13px;
   margin: 0%;
+  font-family: var(--font-secondary); /* Manrope */
 }
 
 .form-options-row {
@@ -98,11 +104,12 @@ body {
   margin-top: 5px;
 }
 
-a, .active, .inactive {
+a,
+.active,
+.inactive {
   color: var(--color-primary);
   text-decoration: none;
 }
-
 
 /* Input with icon */
 .input-with-icon-container {
@@ -122,6 +129,7 @@ a, .active, .inactive {
   border: none;
   background-color: var(--color-bg-input);
   border-radius: 10px;
+  font-family: var(--font-secondary);
 }
 
 .form-input:focus {
@@ -162,6 +170,7 @@ a, .active, .inactive {
   color: var(--color-text-white);
   border-radius: 10px;
   transition: background-color 0.3s;
+  font-family: var(--font-secondary);
 }
 
 .submit-button:hover:not(:disabled) {
@@ -183,6 +192,7 @@ a, .active, .inactive {
   margin-top: 15px;
   border-radius: 10px;
   transition: background-color 0.3s;
+  font-family: var(--font-secondary);
 }
 
 .toggel-btn {
@@ -193,9 +203,10 @@ a, .active, .inactive {
 .validation-error {
   color: var(--color-error);
   padding: 8px;
+  font-family: var(--font-secondary);
 }
 
-/* ---------- SIGNUP STEP PROGRESS ---------- */
+/* ---------- SIGNUP STEPS ---------- */
 .step-indicator {
   display: flex;
   flex-direction: column;
@@ -208,7 +219,6 @@ a, .active, .inactive {
 .step-indicator p {
   margin-bottom: 0 !important;
   font-weight: 500;
-  color: var(--color-text-secondary);
 }
 
 .back-arrow {
@@ -256,18 +266,24 @@ a, .active, .inactive {
 .save-profile-button {
   background-color: var(--color-primary-save);
 }
-.success-container{
+
+.success-container {
   text-align: center;
-  /* padding: 50px 30px; */
 }
-.success-container h2{
-   font-size: 32px;
+
+.success-container h2 {
+  font-size: 32px;
   color: var(--color-primary);
+  font-family: var(--font-primary);
 }
-.success-container p{
-    font-size: 16px;
+
+.success-container p {
+  font-size: 16px;
   color: var(--color-text-secondary);
+  font-family: var(--font-secondary);
 }
+
+/* OTP Boxes */
 .otp-box {
   width: 45px;
   height: 45px;
@@ -277,12 +293,15 @@ a, .active, .inactive {
   font-size: 18px;
   background: #fff;
 }
+
 .otp-box:focus {
   outline: none;
   border: 2px solid var(--color-primary);
 }
-.email a{
+
+.email a {
   color: var(--color--link);
+  font-family: var(--font-secondary);
 }
 
 /* ---------- RESPONSIVE ---------- */
@@ -306,7 +325,7 @@ a, .active, .inactive {
 
   .auth-form {
     width: 100%;
-    height: auto; 
+    height: auto;
     overflow-y: visible;
     padding: 30px 20px;
   }
