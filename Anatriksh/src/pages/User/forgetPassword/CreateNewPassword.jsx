@@ -1,23 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
 
 const CreateNewPassword = ({
   changePassword,
   setChangePassword,
-  errors,
-  handleSubmit,
   showPassword,
   togglePasswordVisibility,
 }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  // Local errors state (fixes your issue)
+  const [errors, setErrors] = useState({});
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const { newPassword, newconfirmPassword } = changePassword;
+
+    let validationErrors = {};
+
+    if (!newPassword) {
+      validationErrors.newPassword = "Password is required.";
+    }
+    if (!newconfirmPassword) {
+      validationErrors.newconfirmPassword = "Confirm Password is required.";
+    }
+    if (
+      newPassword &&
+      newconfirmPassword &&
+      newPassword !== newconfirmPassword
+    ) {
+      validationErrors.newconfirmPassword = "Passwords do not match.";
+    }
+
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) return;
+
+    navigate("/forget/success");
+  };
 
   return (
-    
     <>
       <form onSubmit={handleSubmit}>
-
         {/* New Password */}
         <div className="form-group password-group">
           <label htmlFor="newPassword" className="form-label">
@@ -101,15 +127,13 @@ const CreateNewPassword = ({
         </div>
 
         {/* Submit Button */}
-       <button
-  type="button"
-  className="submit-button continue-button"
-  style={{ marginTop: "40px" }}
-  onClick={() => navigate("/forget/success")}
->
-  Reset Password
-</button>
-
+        <button
+          type="submit"
+          className="submit-button continue-button"
+          style={{ marginTop: "40px" }}
+        >
+          Reset Password
+        </button>
       </form>
     </>
   );
