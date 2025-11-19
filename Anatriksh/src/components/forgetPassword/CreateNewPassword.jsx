@@ -105,7 +105,7 @@ const CreateNewPassword = ({
   type="button"
   className="submit-button continue-button"
   style={{ marginTop: "40px" }}
-  onClick={() => navigate("/forgot/success")}
+  onClick={() => navigate("/forget/success")}
 >
   Reset Password
 </button>

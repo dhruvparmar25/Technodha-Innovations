@@ -15,7 +15,8 @@ const OtpVerificationPage = () => {
       setOtp(newOtp);
       setError("");
 
-      // Auto focus next box
+
+      
       if (value && index < 5) {
         inputRefs.current[index + 1].focus();
       }
@@ -30,8 +31,6 @@ const OtpVerificationPage = () => {
       setError("Please enter a valid 6-digit OTP");
       return;
     }
-
-    // VALID OTP → Navigate to create new password page
     navigate("/forgot/create-new-password");
   };
 
