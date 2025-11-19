@@ -1,10 +1,13 @@
+/* ----------------------------------
+   ROOT VARIABLES
+---------------------------------- */
 :root {
-  /* ---------- COLORS ---------- */
+  /* Colors */
   --color-text-primary: #1E1B4B;
   --color-text-secondary: #6B728E;
-  --color-text-white: white;
-  --color-error: red;
-  --color--link: #06B6D4;
+  --color-text-white: #ffffff;
+  --color-error: #ff0000;
+  --color-link: #06B6D4;
 
   --color-primary: #5d00ff;
   --color-primary-dark: #6D28D9;
@@ -18,16 +21,19 @@
   --color-bg-input: #F6F5FA;
   --color-border: #E5E0F0;
 
-  /* ---------- FONT VARIABLES ---------- */
-  --font-primary: "Urbanist", sans-serif;  /* Titles */
-  --font-secondary: "Manrope", sans-serif; /* Body text */
+  /* Fonts */
+  --font-primary: "Urbanist", sans-serif;
+  --font-secondary: "Manrope", sans-serif;
 }
 
 body {
   font-family: var(--font-secondary);
+  margin: 0;
 }
 
-/* ---------- AUTH LAYOUT ---------- */
+/* ----------------------------------
+   AUTH LAYOUT
+---------------------------------- */
 .auth {
   min-height: 100vh;
   width: 100%;
@@ -48,12 +54,13 @@ body {
   object-fit: cover;
 }
 
-/* Logo */
 .logo {
-  padding: 40px 0px 0px 50px;
+  padding: 40px 0 0 50px;
 }
 
-/* ---------- RIGHT SIDE FORM ---------- */
+/* ----------------------------------
+   FORM SECTION
+---------------------------------- */
 .auth-form {
   width: 50%;
   height: 100vh;
@@ -70,7 +77,6 @@ body {
   margin: auto;
 }
 
-/* ---------- FORM ELEMENTS ---------- */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -82,20 +88,16 @@ body {
   font-family: var(--font-secondary);
 }
 
-/* ------- TITLE FIXED FONT ------- */
 .form-title h1 {
   font-size: 34px;
   color: var(--color-primary);
-  font-family: var(--font-primary);   /* Urbanist */
+  font-family: var(--font-primary);
 }
 
-/* ------- SUBTITLE FIXED FONT ------- */
 .form-title p {
   font-size: 16px;
   color: var(--color-text-secondary);
-  padding-right: 13px;
-  margin: 0%;
-  font-family: var(--font-secondary); /* Manrope */
+  margin: 0;
 }
 
 .form-options-row {
@@ -111,21 +113,20 @@ a,
   text-decoration: none;
 }
 
-/* Input with icon */
+/* ----------------------------------
+   INPUTS
+---------------------------------- */
 .input-with-icon-container {
   position: relative;
+  width: 100%;
   display: flex;
   align-items: center;
-  width: 100%;
-}
-
-.input-with-icon-container .form-input {
-  width: 100%;
-  padding-right: 40px;
 }
 
 .form-input {
+  width: 100%;
   padding: 10px;
+  padding-right: 40px;
   border: none;
   background-color: var(--color-bg-input);
   border-radius: 10px;
@@ -137,7 +138,6 @@ a,
   outline: none;
 }
 
-/* Password toggle */
 .password-toggle-button {
   position: absolute;
   right: 10px;
@@ -146,8 +146,6 @@ a,
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
-  z-index: 10;
   color: #666;
 }
 
@@ -160,17 +158,23 @@ a,
   color: var(--color-text-secondary);
 }
 
-/* Submit Button */
-.submit-button {
+/* ----------------------------------
+   BUTTONS
+---------------------------------- */
+.submit-button,
+.secondary-button {
   width: 100%;
-  margin-top: 16px;
   padding: 12px;
-  border: none;
+  border-radius: 10px;
+  font-family: var(--font-secondary);
+}
+
+.submit-button {
+  margin-top: 16px;
   background-color: var(--color-primary);
   color: var(--color-text-white);
-  border-radius: 10px;
-  transition: background-color 0.3s;
-  font-family: var(--font-secondary);
+  border: none;
+  transition: 0.3s;
 }
 
 .submit-button:hover:not(:disabled) {
@@ -182,89 +186,24 @@ a,
   cursor: not-allowed;
 }
 
-/* Secondary button */
 .secondary-button {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--color-primary);
-  background-color: var(--color-text-white);
-  color: var(--color-primary);
   margin-top: 15px;
-  border-radius: 10px;
-  transition: background-color 0.3s;
-  font-family: var(--font-secondary);
+  background: var(--color-text-white);
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
 }
 
+/* ----------------------------------
+   STATUS + SUCCESS
+---------------------------------- */
 .toggel-btn {
   text-align: center;
-  margin: 5px 0px;
+  margin: 5px 0;
 }
 
 .validation-error {
   color: var(--color-error);
   padding: 8px;
-  font-family: var(--font-secondary);
-}
-
-/* ---------- SIGNUP STEPS ---------- */
-.step-indicator {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: 10px;
-  font-size: 14px;
-  color: var(--color-text-secondary);
-}
-
-.step-indicator p {
-  margin-bottom: 0 !important;
-  font-weight: 500;
-}
-
-.back-arrow {
-  cursor: pointer;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  border: 1px solid var(--color-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Progress bar */
-.progress-bar-container {
-  width: 100%;
-}
-
-.progress-bar {
-  height: 13px;
-  border-radius: 10px;
-  background-color: var(--color-border);
-  position: relative;
-  overflow: hidden;
-}
-
-.progress-bar::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  background-color: var(--color-primary);
-  transition: width 0.3s ease;
-}
-
-.progress-bar.step-1::after {
-  width: 50%;
-}
-
-.progress-bar.step-2::after {
-  width: 100%;
-}
-
-.save-profile-button {
-  background-color: var(--color-primary-save);
 }
 
 .success-container {
@@ -280,10 +219,71 @@ a,
 .success-container p {
   font-size: 16px;
   color: var(--color-text-secondary);
-  font-family: var(--font-secondary);
 }
 
-/* OTP Boxes */
+/* ----------------------------------
+   STEP SYSTEM
+---------------------------------- */
+.step-indicator {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.step-indicator p {
+  margin: 0 !important;
+  font-weight: 500;
+}
+
+.back-arrow {
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-bar-container {
+  width: 100%;
+}
+
+.progress-bar {
+  height: 13px;
+  border-radius: 10px;
+  background-color: var(--color-border);
+  overflow: hidden;
+}
+
+.progress-bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background-color: var(--color-primary);
+  transition: 0.3s ease;
+}
+
+.progress-bar.step-1::after {
+  width: 50%;
+}
+
+.progress-bar.step-2::after {
+  width: 100%;
+}
+
+.save-profile-button {
+  background-color: var(--color-primary-save);
+}
+
+/* ----------------------------------
+   OTP BOX
+---------------------------------- */
 .otp-box {
   width: 45px;
   height: 45px;
@@ -300,33 +300,133 @@ a,
 }
 
 .email a {
-  color: var(--color--link);
-  font-family: var(--font-secondary);
+  color: var(--color-link);
 }
 
-/* ---------- RESPONSIVE ---------- */
+/* ----------------------------------
+   HEADER
+---------------------------------- */
+.app-header {
+  width: 100%;
+  height: 120px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: white;
+  border-bottom: 1px solid #ddd;
+  padding: 20px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.logo {
+  width: 76px;
+  height: 79px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+}
+
+.notification {
+  width: 28px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-img {
+  width: 55px;
+  height: 55px;
+}
+
+.user-info h5,
+.user-info p {
+  margin: 0;
+}
+
+.user-info h5 {
+  font-size: 16px;
+  color: #333;
+}
+
+.user-info p {
+  font-size: 12px;
+  color: gray;
+}
+
+/* ----------------------------------
+   SIDEBAR
+---------------------------------- */
+.sidebar {
+  position: fixed;
+  top: 120px;
+  left: 0;
+  width: 20%;
+  height: calc(100vh - 120px);
+  background: #f7f7f7;
+  border-right: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+.sidebar ul {
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  display: block;
+  padding: 15px 20px;
+  font-size: 18px;
+  color: #333;
+}
+
+.nav-item.active {
+  background: #e6e6e6;
+  font-weight: bold;
+}
+
+/* ----------------------------------
+   CONTENT AREA
+---------------------------------- */
+.content-area {
+  position: absolute;
+  top: 120px;
+  left: 20%;
+  width: 80%;
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+  padding: 20px;
+  background: #fafafa;
+}
+
+/* ----------------------------------
+   RESPONSIVE DESIGN
+---------------------------------- */
 @media (max-width: 1024px) {
   .auth {
     flex-direction: column;
-    height: auto;
   }
 
   .auth-img {
     width: 100%;
     height: 250px;
-    padding: 10px;
-    background-position: center;
   }
 
   .logo {
     padding: 10px;
-    text-align: center;
   }
 
   .auth-form {
     width: 100%;
     height: auto;
     overflow-y: visible;
-    padding: 30px 20px;
   }
 }

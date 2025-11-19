@@ -7,8 +7,7 @@ const DoctorSignupSuccess = () => {
   return (
     <div className="success-container">
       <div className="suc-img">
-        <img src="/Password_
-        success.png" alt="Success" className="success-image" />
+        <img src="/Password_success.png" alt="Success" className="success-image" />
       </div>
       <button
         type="button"

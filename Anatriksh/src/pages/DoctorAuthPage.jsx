@@ -205,7 +205,7 @@ const DoctorAuthPage = ({ mode }) => {
     e.preventDefault();
     if (validateChangePassword()) {
       setAlert({ type: "success", message: "Password Reset Successfully!" });
-      navigate("/login");
+      navigate("/forgot/success");
     }
   };
 
@@ -278,6 +278,8 @@ const DoctorAuthPage = ({ mode }) => {
         handleSubmit={handleChangePasswordSubmit}
         showPassword={showPassword}
         togglePasswordVisibility={togglePasswordVisibility}
+           setErrors={setErrors}   // <-- this was missing
+
       />
     );
   }
