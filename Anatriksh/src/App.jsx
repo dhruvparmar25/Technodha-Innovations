@@ -1,7 +1,8 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import DoctorAuthPage from "./pages/DoctorAuthPage";
-import OtpVerificationPage from "./components/forgetPassword/OtpVerificationPage";
+import OtpVerificationPage from "./pages/User/forgetPassword/OtpVerificationPage";
+
 
 function App() {
   return (

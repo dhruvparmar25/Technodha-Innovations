@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../components/ui/AuthLayout";
-import LoginForm from "../components/auth/LoginForm";
-import ForgotPasswordForm from "../components/forgetPassword/ForgotPasswordForm";
-import DoctorSignupForm from "../components/auth/DoctorSignupForm";
-import DoctorSignupStep1 from "../components/auth/DoctorSignupStep1";
+import LoginForm from "./User/auth/LoginForm";
+import ForgotPasswordForm from "./User/forgetPassword/ForgotPasswordForm";
+import DoctorSignupForm from "./User/auth/DoctorSignupForm";
+import DoctorSignupStep1 from "./User/auth/DoctorSignupStep1";
 import AlertBox from "../components/ui/AlertBox";
-import DoctorSignupSuccess from "../components/auth/DoctorSignupSuccess";
-import CreateNewPassword from "../components/forgetPassword/CreateNewPassword";
-import PasswordChangeSuccess from "../components/forgetPassword/PasswordChangeSuccess";
+import DoctorSignupSuccess from "./User/auth/DoctorSignupSuccess";
+import CreateNewPassword from "./User/forgetPassword/CreateNewPassword";
+import PasswordChangeSuccess from "./User/forgetPassword/PasswordChangeSuccess";
 
 // ------------------------------
 // VALIDATION HELPERS

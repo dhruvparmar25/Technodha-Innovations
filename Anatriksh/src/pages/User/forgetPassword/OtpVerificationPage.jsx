@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import AuthLayout from "../ui/AuthLayout";
+import AuthLayout from "../../../components/ui/AuthLayout";
 
 const OtpVerificationPage = () => {
   const navigate = useNavigate();
