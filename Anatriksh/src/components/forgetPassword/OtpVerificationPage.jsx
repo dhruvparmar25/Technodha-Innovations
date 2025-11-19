@@ -1,17 +1,24 @@
-import React, { useState } from "react";
-
+import React, { useState, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import AuthLayout from "../ui/AuthLayout";
 
 const OtpVerificationPage = () => {
   const navigate = useNavigate();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [error, setError] = useState("");
+  const inputRefs = useRef([]);
 
   const handleInput = (value, index) => {
     if (/^[0-9]?$/.test(value)) {
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
+      setError("");
+
+      // Auto focus next box
+      if (value && index < 5) {
+        inputRefs.current[index + 1].focus();
+      }
     }
   };
 
@@ -19,9 +26,13 @@ const OtpVerificationPage = () => {
     e.preventDefault();
     const code = otp.join("");
 
-    if (code.length === 6) {
-      navigate("/forget/success");
+    if (code.length !== 6) {
+      setError("Please enter a valid 6-digit OTP");
+      return;
     }
+
+    // VALID OTP → Navigate to create new password page
+    navigate("/forgot/create-new-password");
   };
 
   return (
@@ -48,15 +59,27 @@ const OtpVerificationPage = () => {
               type="text"
               maxLength="1"
               value={digit}
+              ref={(el) => (inputRefs.current[index] = el)}
               onChange={(e) => handleInput(e.target.value, index)}
               className="otp-box"
             />
           ))}
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div
+            className="validation-error"
+            style={{ textAlign: "center", marginBottom: "10px" }}
+          >
+            {error}
+          </div>
+        )}
+
         <div style={{ marginTop: "10px", textAlign: "center" }}>
-          Didn’t receive the code ?
+          Didn’t receive the code?
           <NavLink to="#" style={{ color: "var(--color-primary)" }}>
+            {" "}
             Resend OTP
           </NavLink>
         </div>
@@ -68,6 +91,7 @@ const OtpVerificationPage = () => {
         >
           Verify OTP
         </button>
+
         <div className="secondary-button" style={{ textAlign: "center" }}>
           <NavLink to="/login">Back to Login</NavLink>
         </div>
