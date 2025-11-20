@@ -223,10 +223,12 @@ const handleLoginSubmit = async (e) => {
       role: user.role,
     }));
 
-    setAlert({ type: "success", message: "Login Successful!" });
+  setAlert({ type: "success", message: "Login Successful!" });
 
-    // Redirect to dashboard after login
-    navigate("/dashboard");
+setTimeout(() => {
+  navigate("/dashboard");
+}, 1000);
+
 
   } catch (error) {
     setAlert({

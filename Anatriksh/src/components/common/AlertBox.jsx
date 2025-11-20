@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-const AlertBox = ({ type, message, onClose }) => {
+const AlertBox = ({ type = "success", message, onClose }) => {
   if (!message) return null;
 
+  // Autohide after 3 sec
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    const timer = setTimeout(() => onClose(), 3000);
+    return () => clearTimeout(timer);
+  }, [message, onClose]);
+
   return (
-    <div className={`alert alert-${type} alert-dismissible fade show`} role="alert">
-      {message}
-      <button type="button" className="btn-close" onClick={onClose}></button>
+    <div className={`custom-alert alert-${type}`}>
+      <div className="alert-content">
+        <span>{message}</span>
+        <button className="alert-close-btn" onClick={onClose}>
+          ×
+        </button>
+      </div>
     </div>
   );
 };
