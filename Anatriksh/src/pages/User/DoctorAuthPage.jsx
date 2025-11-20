@@ -1,15 +1,26 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthLayout from "../components/ui/AuthLayout";
-import LoginForm from "./User/auth/LoginForm";
-import ForgotPasswordForm from "./User/forgetPassword/ForgotPasswordForm";
-import DoctorSignupForm from "./User/auth/DoctorSignupForm";
-import DoctorSignupStep1 from "./User/auth/DoctorSignupStep1";
-import AlertBox from "../components/ui/AlertBox";
-import DoctorSignupSuccess from "./User/auth/DoctorSignupSuccess";
-import CreateNewPassword from "./User/forgetPassword/CreateNewPassword";
-import PasswordChangeSuccess from "./User/forgetPassword/PasswordChangeSuccess";
-import api from "../api/axiosClient";
+
+// Layout
+import AuthLayout from "../../components/auth/AuthLayout";
+
+// Auth → Login
+import LoginForm from "../../pages/auth/Login/LoginForm";
+
+// Auth → Forgot Password
+import ForgotPasswordForm from "../../pages/auth/ForgotPassword/ForgotPasswordForm";
+import CreateNewPassword from "../../pages/auth/ForgotPassword/CreateNewPassword";
+
+// Auth → Signup
+import DoctorSignupForm from "../../pages/auth/Signup/DoctorSignupForm";
+import DoctorSignupStep1 from "../../pages/auth/Signup/DoctorSignupStep1";
+import DoctorSignupSuccess from "../../pages/auth/Signup/DoctorSignupSuccess";
+
+// Common Components
+import AlertBox from "../../components/common/AlertBox";
+
+// API
+import api from "../../api/axiosClient";
 
 // ------------------------------
 // VALIDATION HELPERS

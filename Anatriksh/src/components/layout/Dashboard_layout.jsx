@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import Dashboard_Header from '../components/Header/Dashboard_Header'
-import Dashboard_slider from '../components/Sidebar/Dashboard_slider'
+import Dashboard_Header from './Dashboard_Header'
+import Dashboard_slider from './Dashboard_slider'
 
 function Dashboard_layout() {
   return (

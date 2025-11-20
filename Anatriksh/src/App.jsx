@@ -1,10 +1,13 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-
-import DoctorAuthPage from "./pages/DoctorAuthPage";
-import OtpVerificationPage from "./pages/User/forgetPassword/OtpVerificationPage";
+import OtpVerificationPage from "./pages/auth/ForgotPassword/OtpVerificationPage";
+import DoctorAuthPage from "./pages/User/DoctorAuthPage";
 import Dashboard from "./pages/Admin/Dashboard";
-import Dashboard_layout from "./layouts/Dashboard_layout";
+import Dashboard_layout from "./components/layout/Dashboard_layout";
+// import DoctorAuthPage from "./pages/DoctorAuthPage";
+// import OtpVerificationPage from "./pages/User/forgetPassword/OtpVerificationPage";
+// import Dashboard from "./pages/Admin/Dashboard";
+// import Dashboard_layout from "./layouts/Dashboard_layout";
 
 function App() {
   return (
