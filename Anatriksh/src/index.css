@@ -257,7 +257,9 @@ a,
   border-radius: 10px;
   background-color: var(--color-border);
   overflow: hidden;
+  position: relative;     /* REQUIRED */
 }
+
 
 .progress-bar::after {
   content: "";
@@ -268,6 +270,7 @@ a,
   background-color: var(--color-primary);
   transition: 0.3s ease;
 }
+
 
 .progress-bar.step-1::after {
   width: 50%;
