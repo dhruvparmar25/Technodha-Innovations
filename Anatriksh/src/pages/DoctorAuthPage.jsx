@@ -9,6 +9,7 @@ import AlertBox from "../components/ui/AlertBox";
 import DoctorSignupSuccess from "./User/auth/DoctorSignupSuccess";
 import CreateNewPassword from "./User/forgetPassword/CreateNewPassword";
 import PasswordChangeSuccess from "./User/forgetPassword/PasswordChangeSuccess";
+import api from "../api/axiosClient";
 
 // ------------------------------
 // VALIDATION HELPERS
@@ -173,12 +174,12 @@ const DoctorAuthPage = ({ mode }) => {
   // SUBMIT HANDLERS
   // ------------------------------
 
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
-    if (validateLoginForm()) {
-      setAlert({ type: "success", message: "Login Successful!" });
-    }
-  };
+  // const handleLoginSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (validateLoginForm()) {
+  //     setAlert({ type: "success", message: "Login Successful!" });
+  //   }
+  // };
 
   const handleForgotSubmit = (e) => {
     e.preventDefault();
@@ -187,6 +188,43 @@ const DoctorAuthPage = ({ mode }) => {
       navigate("/forgot/verify-otp");
     }
   };
+
+const handleLoginSubmit = async (e) => {
+  e.preventDefault();
+  if (!validateLoginForm()) return;
+
+  try {
+    const res = await api.post("/users/login/", {
+      email,
+      password,
+    });
+
+    const user = res.data.data;
+
+    // Save Tokens
+    localStorage.setItem("access_token", user.access_token);
+    localStorage.setItem("refresh_token", user.refresh_token);
+
+    // Save Basic User Data
+    localStorage.setItem("user", JSON.stringify({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    }));
+
+    setAlert({ type: "success", message: "Login Successful!" });
+
+    // Redirect to dashboard after login
+    navigate("/dashboard");
+
+  } catch (error) {
+    setAlert({
+      type: "error",
+      message: error.response?.data?.detail || "Invalid email or password",
+    });
+  }
+};
+
 
   const handleSignupStep1Submit = (e) => {
     e.preventDefault();
