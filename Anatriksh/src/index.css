@@ -471,7 +471,12 @@ a,
     opacity: 0;
   }
 }
-
+/* Dashboard */
+.das-logo{
+  width: 76px;
+  height: 79px;
+  margin:auto;
+}
 /* ----------------------------------
    RESPONSIVE DESIGN
 ---------------------------------- */

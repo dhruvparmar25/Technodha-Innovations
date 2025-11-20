@@ -21,6 +21,7 @@ import AlertBox from "../../components/common/AlertBox";
 
 // API
 import api from "../../api/axiosClient";
+import PasswordChangeSuccess from "../auth/ForgotPassword/PasswordChangeSuccess";
 
 // ------------------------------
 // VALIDATION HELPERS

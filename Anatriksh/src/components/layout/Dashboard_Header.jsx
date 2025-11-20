@@ -4,7 +4,7 @@ function Dashboard_Header() {
   return (
     <header className="app-header">
       <div className="header-left">
-        <img src="/logo.png" alt="logo" className="logo" />
+        <img src="/logo.png" alt="logo" className="das-logo" />
       </div>
 
       <div className="header-right">

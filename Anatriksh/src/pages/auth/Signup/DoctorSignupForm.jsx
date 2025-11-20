@@ -81,7 +81,7 @@ const DoctorSignupForm = ({
 
       {/* License Number Input */}
       <div className="form-group">
-        <label htmlFor="licenseNumber" className="form-label">License Number</label>
+        <label htmlFor="licenseNumber" className="form-label">License Number [Optional]</label>
         <input
           type="text"
           className="form-input"
