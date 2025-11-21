@@ -2,20 +2,19 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../../../components/auth/AuthLayout";
 
-const SignupSuccess = () => {
+const PasswordSuccess = () => {
   const navigate = useNavigate();
 
   return (
     <AuthLayout
-      title="Account Created Successfully!"
-      subtitle="Your doctor profile is ready."
+      title="Password Changed Successfully!"
+      subtitle="You can now log in with your new password"
     >
       <div className="success-container">
-        <img src="/success.png" className="success-image" alt="success" />
-        <h2>Account Created Successfully!</h2>
-        <p>You can now log in to continue</p>
+        <img src="/Password_success.png" className="success-image" alt="success" />
 
         <button
+          type="button"
           className="submit-button"
           onClick={() => navigate("/login")}
         >
@@ -26,4 +25,4 @@ const SignupSuccess = () => {
   );
 };
 
-export default SignupSuccess;
+export default PasswordSuccess;

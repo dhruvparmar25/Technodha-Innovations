@@ -1,141 +1,114 @@
 import React, { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import AuthLayout from "../../../components/auth/AuthLayout";
 import { useNavigate } from "react-router-dom";
 
-const CreateNewPassword = ({
-  changePassword,
-  setChangePassword,
-  showPassword,
-  togglePasswordVisibility,
-}) => {
+const CreateNewPassword = () => {
   const navigate = useNavigate();
 
-  // Local errors state (fixes your issue)
+  const [passwords, setPasswords] = useState({
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const [show, setShow] = useState({
+    new: false,
+    confirm: false,
+  });
+
   const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    let e = {};
+    let ok = true;
+
+    if (!passwords.newPassword.trim())
+      (e.newPassword = "Password required"), (ok = false);
+
+    if (!passwords.confirmPassword.trim())
+      (e.confirmPassword = "Confirm required"), (ok = false);
+
+    if (
+      passwords.newPassword &&
+      passwords.confirmPassword &&
+      passwords.newPassword !== passwords.confirmPassword
+    ) {
+      e.confirmPassword = "Passwords do not match";
+      ok = false;
+    }
+
+    setErrors(e);
+    return ok;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const { newPassword, newconfirmPassword } = changePassword;
-
-    let validationErrors = {};
-
-    if (!newPassword) {
-      validationErrors.newPassword = "Password is required.";
-    }
-    if (!newconfirmPassword) {
-      validationErrors.newconfirmPassword = "Confirm Password is required.";
-    }
-    if (
-      newPassword &&
-      newconfirmPassword &&
-      newPassword !== newconfirmPassword
-    ) {
-      validationErrors.newconfirmPassword = "Passwords do not match.";
-    }
-
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length > 0) return;
-
-    navigate("/forget/success");
+    if (validate()) navigate("/forgot/success");
   };
 
   return (
-    <>
+    <AuthLayout title="Reset Password" subtitle="Enter your new password">
       <form onSubmit={handleSubmit}>
         {/* New Password */}
         <div className="form-group password-group">
-          <label htmlFor="newPassword" className="form-label">
-            New Password
-          </label>
-
+          <label>New Password</label>
           <div className="input-with-icon-container">
             <input
-              type={showPassword.create ? "text" : "password"}
+              type={show.new ? "text" : "password"}
               className="form-input"
-              id="newPassword"
-              placeholder="Enter New Password"
-              name="newPassword"
-              value={changePassword.newPassword}
+              placeholder="Enter new password"
+              value={passwords.newPassword}
               onChange={(e) =>
-                setChangePassword({
-                  ...changePassword,
-                  newPassword: e.target.value,
-                })
+                setPasswords({ ...passwords, newPassword: e.target.value })
               }
             />
-
             <button
               type="button"
-              className="password-toggle-button"
-              onClick={() => togglePasswordVisibility("create")}
+              onClick={() => setShow({ ...show, new: !show.new })}
             >
-              {showPassword.create ? (
-                <FaRegEyeSlash size={20} />
-              ) : (
-                <FaRegEye size={20} />
-              )}
+              {show.new ? <FaRegEyeSlash /> : <FaRegEye />}
             </button>
           </div>
-
-          {errors?.newPassword && (
-            <div className="validation-error">{errors.newPassword}</div>
+          {errors.newPassword && (
+            <p className="validation-error">{errors.newPassword}</p>
           )}
         </div>
 
-        {/* Confirm New Password */}
+        {/* Confirm */}
         <div className="form-group password-group">
-          <label htmlFor="newconfirmPassword" className="form-label">
-            Confirm Password
-          </label>
-
+          <label>Confirm Password</label>
           <div className="input-with-icon-container">
             <input
-              type={showPassword.confirm ? "text" : "password"}
+              type={show.confirm ? "text" : "password"}
               className="form-input"
-              id="newconfirmPassword"
-              placeholder="Re-enter Your Password"
-              name="newconfirmPassword"
-              value={changePassword.newconfirmPassword}
+              placeholder="Confirm new password"
+              value={passwords.confirmPassword}
               onChange={(e) =>
-                setChangePassword({
-                  ...changePassword,
-                  newconfirmPassword: e.target.value,
+                setPasswords({
+                  ...passwords,
+                  confirmPassword: e.target.value,
                 })
               }
             />
-
             <button
               type="button"
-              className="password-toggle-button"
-              onClick={() => togglePasswordVisibility("confirm")}
+              onClick={() =>
+                setShow({ ...show, confirm: !show.confirm })
+              }
             >
-              {showPassword.confirm ? (
-                <FaRegEyeSlash size={20} />
-              ) : (
-                <FaRegEye size={20} />
-              )}
+              {show.confirm ? <FaRegEyeSlash /> : <FaRegEye />}
             </button>
           </div>
-
-          {errors?.newconfirmPassword && (
-            <div className="validation-error">
-              {errors.newconfirmPassword}
-            </div>
+          {errors.confirmPassword && (
+            <p className="validation-error">{errors.confirmPassword}</p>
           )}
         </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="submit-button continue-button"
-          style={{ marginTop: "40px" }}
-        >
+        <button className="submit-button" style={{ marginTop: 40 }}>
           Reset Password
         </button>
       </form>
-    </>
+    </AuthLayout>
   );
 };
 
