@@ -62,7 +62,7 @@ const Login = () => {
       )}
 
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: "", password: "",rememberMe: false }}
         validationSchema={LoginSchema}
         onSubmit={handleLoginSubmit}
       >
@@ -121,7 +121,21 @@ const Login = () => {
 
             {/* Forgot Password */}
             <div className="form-options-row">
-              <div></div>
+             <div className="form-check-group">
+  <input
+    type="checkbox"
+    id="rememberMe"
+    name="rememberMe"
+    className="form-check-input"
+    checked={values.rememberMe}
+    onChange={handleChange}
+  />
+
+  <label htmlFor="rememberMe" className="form-check-label">
+    Remember me
+  </label>
+</div>
+
               <NavLink to="/forgot">Forgot password?</NavLink>
             </div>
 
