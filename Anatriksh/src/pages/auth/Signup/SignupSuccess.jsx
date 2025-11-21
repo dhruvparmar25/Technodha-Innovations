@@ -6,10 +6,7 @@ const SignupSuccess = () => {
   const navigate = useNavigate();
 
   return (
-    <AuthLayout
-      title="Account Created Successfully!"
-      subtitle="Your doctor profile is ready."
-    >
+    <AuthLayout>
       <div className="success-container">
         <img src="/success.png" className="success-image" alt="success" />
         <h2>Account Created Successfully!</h2>

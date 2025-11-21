@@ -203,7 +203,8 @@ a,
 
 .validation-error {
   color: var(--color-error);
-  padding: 8px;
+  padding: 4px 2px;
+margin: 0%;
 }
 
 .success-container {

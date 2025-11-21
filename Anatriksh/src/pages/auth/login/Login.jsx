@@ -3,53 +3,34 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
-import api from "../../../api/axiosClient"; // remove if not using API
+import api from "../../../api/axiosClient";
+import { Formik } from "formik";
+import * as Yup from "Yup";
+const LoginSchema = Yup.object().shape({
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string()
+    .min(6, "Minimum 6 characters")
+    .required("Password is required"),
+});
 
 const Login = () => {
   const navigate = useNavigate();
 
-  // Form State
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  // Errors
-  const [errors, setErrors] = useState({});
-
-  // AlertBox
+  // AlertBox state
   const [alert, setAlert] = useState({ type: "", message: "" });
 
-  // Show Password
+  // Show / Hide Password
   const [showPassword, setShowPassword] = useState(false);
-  const togglePasswordVisibility = () =>
-    setShowPassword((prev) => !prev);
+  const togglePasswordVisibility = () => setShowPassword((p) => !p);
 
-  // Validation
-  const validate = () => {
-    let e = {};
-
-    if (!email.includes("@")) e.email = "Invalid email";
-    if (password.length < 6) e.password = "Min 6 characters";
-
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  };
-
-  // Submit Login
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!validate()) {
-      setAlert({ type: "error", message: "Please fix the errors above." });
-      return;
-    }
-
+  // Handle API Login
+  const handleLoginSubmit = async (values, { setSubmitting }) => {
     try {
-      // API Request (if needed)
-      const res = await api.post("/users/login/", { email, password });
+      const res = await api.post("/users/login/", values);
 
       const user = res.data.data;
 
-      // Save token
+      // Save tokens
       localStorage.setItem("access_token", user.access_token);
       localStorage.setItem("refresh_token", user.refresh_token);
 
@@ -58,19 +39,19 @@ const Login = () => {
 
       setAlert({ type: "success", message: "Login Successful!" });
 
-      // Redirect after alert
-      setTimeout(() => navigate("/dashboard"), 3000);
+      setTimeout(() => navigate("/dashboard"), 2500);
     } catch (err) {
       setAlert({
         type: "error",
-        message: err.response?.data?.detail || "Invalid credentials",
+        message: err.response?.data?.detail || "Invalid email or password",
       });
     }
+
+    setSubmitting(false);
   };
 
   return (
     <AuthLayout title="Welcome Back" subtitle="Login to continue">
-
       {/* ALERT BOX */}
       {alert.message && (
         <AlertBox
@@ -80,64 +61,86 @@ const Login = () => {
         />
       )}
 
-      <form onSubmit={handleSubmit}>
-        
-        {/* Email */}
-        <div className="form-group">
-          <label>Email</label>
-          <input
-            type="text"
-            className="form-input"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          {errors.email && <div className="validation-error">{errors.email}</div>}
-        </div>
+      <Formik
+        initialValues={{ email: "", password: "" }}
+        validationSchema={LoginSchema}
+        onSubmit={handleLoginSubmit}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleSubmit,
+          isSubmitting,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            {/* Email */}
+            <div className="form-group">
+              <label>Email</label>
+              <input
+                type="text"
+                name="email"
+                className="form-input"
+                placeholder="Enter your email"
+                value={values.email}
+                onChange={handleChange}
+              />
+              {errors.email && touched.email && (
+                <p className="validation-error">{errors.email}</p>
+              )}
+            </div>
 
-        {/* Password */}
-        <div className="form-group password-group">
-          <label>Password</label>
-          <div className="input-with-icon-container">
-            <input
-              type={showPassword ? "text" : "password"}
-              className="form-input"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            {/* Password */}
+            <div className="form-group password-group">
+              <label>Password</label>
 
+              <div className="input-with-icon-container">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  className="form-input"
+                  placeholder="Enter your password"
+                  value={values.password}
+                  onChange={handleChange}
+                />
+
+                <button
+                  type="button"
+                  className="password-toggle-button"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                </button>
+              </div>
+
+              {errors.password && touched.password && (
+                <p className="validation-error">{errors.password}</p>
+              )}
+            </div>
+
+            {/* Forgot Password */}
+            <div className="form-options-row">
+              <div></div>
+              <NavLink to="/forgot">Forgot password?</NavLink>
+            </div>
+
+            {/* Submit Button */}
             <button
-              type="button"
-              className="password-toggle-button"
-              onClick={togglePasswordVisibility}
+              type="submit"
+              className="submit-button"
+              disabled={isSubmitting}
             >
-              {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+              {isSubmitting ? "Logging in..." : "Login"}
             </button>
-          </div>
 
-          {errors.password && (
-            <div className="validation-error">{errors.password}</div>
-          )}
-        </div>
-
-        {/* Forgot password */}
-        <div className="form-options-row">
-          <div></div>
-
-          <NavLink to="/forgot" className="forgot-password-link">
-            Forgot password?
-          </NavLink>
-        </div>
-
-        <button className="submit-button" type="submit">
-          Login
-        </button>
-
-        <p className="toggel-btn">
-          Don't have an account? <NavLink to="/signup/step1">Signup</NavLink>
-        </p>
-      </form>
+            <p className="toggel-btn">
+              Don't have an account?{" "}
+              <NavLink to="/signup/step1">Signup</NavLink>
+            </p>
+          </form>
+        )}
+      </Formik>
     </AuthLayout>
   );
 };

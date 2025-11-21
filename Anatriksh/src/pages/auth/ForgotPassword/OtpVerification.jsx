@@ -1,20 +1,31 @@
-import React, { useState, useRef } from "react";
-import { FaAngleLeft } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import React, { useRef, useState } from "react";
+import { Formik } from "formik";
+import * as Yup from "Yup";
+import { NavLink, useNavigate } from "react-router-dom";
+
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
 
+// Yup Validation (6-digit OTP)
+const OtpSchema = Yup.object().shape({
+  otp: Yup.string()
+    .matches(/^[0-9]{6}$/, "Enter a valid 6-digit OTP")
+    .required("OTP is required"),
+});
+
 const OtpVerification = () => {
   const navigate = useNavigate();
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [alert, setAlert] = useState({ type: "", message: "" });
   const inputRefs = useRef([]);
+  const [alert, setAlert] = useState({ type: "", message: "" });
 
-  const handleInput = (value, index) => {
+  // Move to next box automatically
+  const handleInputChange = (value, index, otp, setFieldValue) => {
     if (/^[0-9]?$/.test(value)) {
-      const updated = [...otp];
-      updated[index] = value;
-      setOtp(updated);
+      const newOtp = otp.split("");
+      newOtp[index] = value;
+      const updatedOtp = newOtp.join("");
+
+      setFieldValue("otp", updatedOtp);
 
       if (value && index < 5) {
         inputRefs.current[index + 1].focus();
@@ -22,22 +33,23 @@ const OtpVerification = () => {
     }
   };
 
-  const handleVerify = (e) => {
-    e.preventDefault();
-    const code = otp.join("");
+  const handleSubmit = (values) => {
+    console.log("OTP Submitted:", values.otp);
 
-    if (code.length !== 6) {
-      setAlert({ type: "error", message: "Enter a valid 6-digit OTP" });
-      return;
-    }
+    setAlert({ type: "success", message: "OTP Verified Successfully!" });
 
-    setAlert({ type: "success", message: "OTP Verified!" });
-
-    setTimeout(() => navigate("/forgot/create-new-password"), 1500);
+    setTimeout(() => {
+      navigate("/forgot/create-new-password");
+    }, 1500);
   };
 
   return (
-    <AuthLayout>
+    <AuthLayout
+      title="Verify Your Email"
+      subtitle="Enter the 6-digit OTP we’ve sent to your email:"
+    >
+      
+      {/* Alert Box */}
       {alert.message && (
         <AlertBox
           type={alert.type}
@@ -46,42 +58,76 @@ const OtpVerification = () => {
         />
       )}
 
-      <div className="back-arrow" onClick={() => navigate("/forgot")}>
-        <FaAngleLeft size={20} color="#7C3AED" />
+      <div className="email">
+        <a href="#">doctor@example.com</a>
       </div>
 
-      <div className="form-title">
-        <h1>Verify OTP</h1>
-        <p>Enter the 6-digit code sent to your email</p>
-      </div>
+      <Formik
+        initialValues={{ otp: "" }}
+        validationSchema={OtpSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ values, errors, touched, setFieldValue, handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            
+            {/* OTP INPUT BOXES */}
+            <div
+              style={{
+                display: "flex",
+                gap: "40px",
+                marginTop: "35px",
+                marginBottom: "12px",
+              }}
+            >
+              {[0, 1, 2, 3, 4, 5].map((index) => (
+                <input
+                  key={index}
+                  type="text"
+                  maxLength="1"
+                  className="otp-box"
+                  value={values.otp[index] || ""}
+                  ref={(el) => (inputRefs.current[index] = el)}
+                  onChange={(e) =>
+                    handleInputChange(
+                      e.target.value,
+                      index,
+                      values.otp,
+                      setFieldValue
+                    )
+                  }
+                />
+              ))}
+            </div>
 
-      <form onSubmit={handleVerify}>
-        <div style={{ display: "flex", gap: "30px", marginTop: "25px" }}>
-          {otp.map((digit, index) => (
-            <input
-              key={index}
-              type="text"
-              maxLength="1"
-              ref={(el) => (inputRefs.current[index] = el)}
-              value={digit}
-              onChange={(e) => handleInput(e.target.value, index)}
-              className="otp-box"
-            />
-          ))}
-        </div>
+            {/* Error Message */}
+            {errors.otp && touched.otp && (
+              <p className="validation-error" style={{ textAlign: "center" }}>
+                {errors.otp}
+              </p>
+            )}
 
-        <button type="submit" className="submit-button" style={{ marginTop: "25px" }}>
-          Verify OTP
-        </button>
+            <div style={{ marginTop: "10px", textAlign: "center" }}>
+              Didn’t receive the code?
+              <NavLink to="#" style={{ color: "var(--color-primary)" }}>
+                {" "}
+                Resend OTP
+              </NavLink>
+            </div>
 
-        <button
-          type="button"
-          className="secondary-button"
-          onClick={() => navigate("/login")}
-        >
-          Back to Login
-        </button>
-      </form>
+            <button
+              type="submit"
+              className="submit-button"
+              style={{ marginTop: "20px" }}
+            >
+              Verify OTP
+            </button>
+
+            <div className="secondary-button" style={{ textAlign: "center" }}>
+              <NavLink to="/login">Back to Login</NavLink>
+            </div>
+          </form>
+        )}
+      </Formik>
     </AuthLayout>
   );
 };

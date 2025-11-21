@@ -1,38 +1,37 @@
 import React, { useState } from "react";
-import { FaAngleLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { Formik } from "formik";
+import * as Yup from "Yup";
+
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [errors, setErrors] = useState({});
   const [alert, setAlert] = useState({ type: "", message: "" });
 
-  const validate = () => {
-    let e = {};
-    if (!email.trim()) e.email = "Email is required";
-    else if (!email.includes("@")) e.email = "Enter a valid email";
+  // Yup validation
+  const ForgotSchema = Yup.object().shape({
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
+  });
 
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  };
+  const handleSubmit = (values) => {
+    console.log("Forgot Email:", values);
 
-  const handleResetClick = () => {
-    if (!validate()) {
-      setAlert({ type: "error", message: "Please fix the errors above." });
-      return;
-    }
+    setAlert({ type: "success", message: "Reset link sent to your email!" });
 
-    setAlert({ type: "success", message: "OTP Sent to your email" });
-
-    setTimeout(() => navigate("/forgot/verify-otp"), 1500);
+    setTimeout(() => {
+      navigate("/forgot/verify-otp");
+    }, 1500);
   };
 
   return (
-    <AuthLayout>
+    <AuthLayout title="Reset Your Password" subtitle="Enter your email to receive reset OTP">
+      
+      {/* Alert */}
       {alert.message && (
         <AlertBox
           type={alert.type}
@@ -41,40 +40,43 @@ const ForgotPassword = () => {
         />
       )}
 
-      <form>
-        <div className="back-arrow" onClick={() => navigate("/login")}>
-          <FaAngleLeft size={20} color="#7C3AED" />
-        </div>
+      <Formik
+        initialValues={{ email: "" }}
+        validationSchema={ForgotSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ values, errors, touched, handleChange, handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            
+            {/* Email */}
+            <div className="form-group">
+              <label>Email Address</label>
+              <input
+                className="form-input"
+                name="email"
+                placeholder="Enter your email"
+                value={values.email}
+                onChange={handleChange}
+              />
+              {errors.email && touched.email && (
+                <p className="validation-error">{errors.email}</p>
+              )}
+            </div>
 
-        <div className="form-title">
-          <h1>Reset Your Password</h1>
-          <p>We will send a reset link to your email</p>
-        </div>
+            <button type="submit" className="submit-button">
+              Send Reset Link
+            </button>
 
-        {/* Email */}
-        <div className="form-group">
-          <label>Email Address</label>
-          <input
-            className="form-input"
-            placeholder="Enter Your Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          {errors.email && <p className="validation-error">{errors.email}</p>}
-        </div>
-
-        <button type="button" className="submit-button" onClick={handleResetClick}>
-          Send OTP
-        </button>
-
-        <button
-          type="button"
-          className="secondary-button"
-          onClick={() => navigate("/login")}
-        >
-          Back to Login
-        </button>
-      </form>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => navigate("/login")}
+            >
+              Back to Login
+            </button>
+          </form>
+        )}
+      </Formik>
     </AuthLayout>
   );
 };

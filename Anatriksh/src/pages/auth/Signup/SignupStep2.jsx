@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaAngleLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../../../components/auth/AuthLayout";
@@ -7,6 +7,25 @@ import AlertBox from "../../../components/common/AlertBox";
 const SignupStep2 = () => {
   const navigate = useNavigate();
 
+  // Step1 ka data store karne ke liye
+  const [step1Data, setStep1Data] = useState(null);
+
+  // Step1 data load karega
+// Load Step1 Data
+useEffect(() => {
+  const loadStep1 = () => {
+    const saved = localStorage.getItem("signupStep1");
+    if (saved) {
+      setStep1Data(JSON.parse(saved));
+      console.log("Step1 Loaded Data:", JSON.parse(saved));
+    }
+  };
+
+  loadStep1();
+}, []);
+
+
+  // Step2 form
   const [form, setForm] = useState({
     name: "",
     specialization: "",
@@ -33,19 +52,27 @@ const SignupStep2 = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validate()) {
-      setAlert({ type: "error", message: "Please fix the errors above" });
-      return;
-    }
+    if (!validate()) return;
+
+    // Combine Step1 + Step2
+    const finalData = {
+      ...step1Data,
+      ...form,
+    };
+
+    console.log("Final Signup Data:", finalData);
+
+    localStorage.setItem("signupFinalData", JSON.stringify(finalData));
 
     setAlert({ type: "success", message: "Profile Completed!" });
 
-    setTimeout(() => navigate("/signup/success"), 2500);
+    setTimeout(() => {
+      navigate("/signup/success");
+    }, 1500);
   };
 
   return (
     <AuthLayout>
-      {/* ALERT BOX */}
       {alert.message && (
         <AlertBox
           type={alert.type}
@@ -55,13 +82,10 @@ const SignupStep2 = () => {
       )}
 
       <form onSubmit={handleSubmit}>
-
+        
         {/* STEP INDICATOR */}
         <div className="step-indicator">
-          <div
-            className="back-arrow"
-            onClick={() => navigate("/signup/step1")}
-          >
+          <div className="back-arrow" onClick={() => navigate("/signup/step1")}>
             <FaAngleLeft size={20} color="#7C3AED" />
           </div>
 
@@ -72,7 +96,7 @@ const SignupStep2 = () => {
           </div>
         </div>
 
-        {/* TITLE */}
+        {/* FORM TITLE */}
         <div className="form-title">
           <h1>Create Your Doctor Account</h1>
           <p>Join our platform to connect with patients securely</p>
@@ -83,9 +107,9 @@ const SignupStep2 = () => {
           <label>Name</label>
           <input
             className="form-input"
-            value={form.name}
             name="name"
             placeholder="Enter name"
+            value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
           {errors.name && <p className="validation-error">{errors.name}</p>}
@@ -98,9 +122,7 @@ const SignupStep2 = () => {
             className="form-input"
             name="specialization"
             value={form.specialization}
-            onChange={(e) =>
-              setForm({ ...form, specialization: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, specialization: e.target.value })}
           >
             <option value="">Select specialization</option>
             <option value="Cardiology">Cardiology</option>
@@ -117,22 +139,22 @@ const SignupStep2 = () => {
           <label>Clinic / Hospital</label>
           <input
             className="form-input"
-            value={form.clinic}
             name="clinic"
             placeholder="Enter clinic name"
+            value={form.clinic}
             onChange={(e) => setForm({ ...form, clinic: e.target.value })}
           />
           {errors.clinic && <p className="validation-error">{errors.clinic}</p>}
         </div>
 
-        {/* License */}
+        {/* License Number */}
         <div className="form-group">
           <label>License Number (Optional)</label>
           <input
             className="form-input"
-            value={form.licenseNumber}
             name="licenseNumber"
             placeholder="Enter license"
+            value={form.licenseNumber}
             onChange={(e) =>
               setForm({ ...form, licenseNumber: e.target.value })
             }
@@ -144,9 +166,9 @@ const SignupStep2 = () => {
           <label>Contact</label>
           <input
             className="form-input"
-            value={form.contact}
             name="contact"
-            placeholder="Enter 10-digit mobile"
+            placeholder="10-digit mobile"
+            value={form.contact}
             onChange={(e) => setForm({ ...form, contact: e.target.value })}
           />
           {errors.contact && (

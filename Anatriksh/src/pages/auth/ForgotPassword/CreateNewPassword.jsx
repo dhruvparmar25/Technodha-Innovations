@@ -1,16 +1,26 @@
 import React, { useState } from "react";
-import { FaRegEye, FaRegEyeSlash, FaAngleLeft } from "react-icons/fa";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { Formik } from "formik";
+import * as Yup from "Yup";
+
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
 
+// ------------------------------
+// Yup Validation Schema
+// ------------------------------
+const PasswordSchema = Yup.object().shape({
+  newPassword: Yup.string()
+    .min(6, "Password must be minimum 6 characters")
+    .required("New password is required"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("newPassword"), null], "Passwords do not match")
+    .required("Confirm password is required"),
+});
+
 const CreateNewPassword = () => {
   const navigate = useNavigate();
-
-  const [form, setForm] = useState({
-    newPassword: "",
-    confirmPassword: "",
-  });
 
   const [show, setShow] = useState({
     new: false,
@@ -18,36 +28,24 @@ const CreateNewPassword = () => {
   });
 
   const [alert, setAlert] = useState({ type: "", message: "" });
-  const [errors, setErrors] = useState({});
 
-  const toggle = (f) => setShow((p) => ({ ...p, [f]: !p[f] }));
+  const toggle = (field) =>
+    setShow((prev) => ({ ...prev, [field]: !prev[field] }));
 
-  const validate = () => {
-    let e = {};
+  const handleSubmitPassword = (values) => {
+    console.log("Password Reset Data:", values);
 
-    if (form.newPassword.length < 6) e.newPassword = "Min 6 characters";
-    if (form.confirmPassword !== form.newPassword)
-      e.confirmPassword = "Passwords don't match";
+    setAlert({ type: "success", message: "Password Reset Successfully!" });
 
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!validate()) {
-      setAlert({ type: "error", message: "Fix the errors above" });
-      return;
-    }
-
-    setAlert({ type: "success", message: "Password changed successfully!" });
-
-    setTimeout(() => navigate("/forgot/success"), 1500);
+    setTimeout(() => {
+      navigate("/forgot/success");
+    }, 1500);
   };
 
   return (
-    <AuthLayout>
+    <AuthLayout title="Create New Password" subtitle="Set a strong password to protect your account.">
+
+      {/* Alert */}
       {alert.message && (
         <AlertBox
           type={alert.type}
@@ -56,73 +54,77 @@ const CreateNewPassword = () => {
         />
       )}
 
-      <div className="back-arrow" onClick={() => navigate("/forgot/verify-otp")}>
-        <FaAngleLeft size={20} color="#7C3AED" />
-      </div>
+      <Formik
+        initialValues={{
+          newPassword: "",
+          confirmPassword: "",
+        }}
+        validationSchema={PasswordSchema}
+        onSubmit={handleSubmitPassword}
+      >
+        {({ values, errors, touched, handleChange, handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
 
-      <div className="form-title">
-        <h1>Create New Password</h1>
-        <p>Set a strong password to secure your account</p>
-      </div>
+            {/* NEW PASSWORD */}
+            <div className="form-group password-group">
+              <label>New Password</label>
+              <div className="input-with-icon-container">
+                <input
+                  type={show.new ? "text" : "password"}
+                  className="form-input"
+                  name="newPassword"
+                  placeholder="Enter New Password"
+                  value={values.newPassword}
+                  onChange={handleChange}
+                />
 
-      <form onSubmit={handleSubmit}>
+                <button
+                  type="button"
+                  className="password-toggle-button"
+                  onClick={() => toggle("new")}
+                >
+                  {show.new ? <FaRegEyeSlash /> : <FaRegEye />}
+                </button>
+              </div>
 
-        {/* New Password */}
-        <div className="form-group">
-          <label>New Password</label>
-          <div className="input-with-icon-container">
-            <input
-              type={show.new ? "text" : "password"}
-              className="form-input"
-              placeholder="Enter new password"
-              value={form.newPassword}
-              onChange={(e) =>
-                setForm({ ...form, newPassword: e.target.value })
-              }
-            />
+              {errors.newPassword && touched.newPassword && (
+                <p className="validation-error">{errors.newPassword}</p>
+              )}
+            </div>
 
-            <button
-              type="button"
-              className="password-toggle-button"
-              onClick={() => toggle("new")}
-            >
-              {show.new ? <FaRegEyeSlash /> : <FaRegEye />}
+            {/* CONFIRM PASSWORD */}
+            <div className="form-group password-group">
+              <label>Confirm Password</label>
+              <div className="input-with-icon-container">
+                <input
+                  type={show.confirm ? "text" : "password"}
+                  className="form-input"
+                  name="confirmPassword"
+                  placeholder="Re-enter New Password"
+                  value={values.confirmPassword}
+                  onChange={handleChange}
+                />
+
+                <button
+                  type="button"
+                  className="password-toggle-button"
+                  onClick={() => toggle("confirm")}
+                >
+                  {show.confirm ? <FaRegEyeSlash /> : <FaRegEye />}
+                </button>
+              </div>
+
+              {errors.confirmPassword && touched.confirmPassword && (
+                <p className="validation-error">{errors.confirmPassword}</p>
+              )}
+            </div>
+
+            <button type="submit" className="submit-button" style={{ marginTop: "40px" }}>
+              Reset Password
             </button>
-          </div>
-          {errors.newPassword && (
-            <div className="validation-error">{errors.newPassword}</div>
-          )}
-        </div>
-
-        {/* Confirm Password */}
-        <div className="form-group">
-          <label>Confirm Password</label>
-          <div className="input-with-icon-container">
-            <input
-              type={show.confirm ? "text" : "password"}
-              className="form-input"
-              placeholder="Re-enter password"
-              value={form.confirmPassword}
-              onChange={(e) =>
-                setForm({ ...form, confirmPassword: e.target.value })
-              }
-            />
-
-            <button
-              type="button"
-              className="password-toggle-button"
-              onClick={() => toggle("confirm")}
-            >
-              {show.confirm ? <FaRegEyeSlash /> : <FaRegEye />}
-            </button>
-          </div>
-          {errors.confirmPassword && (
-            <div className="validation-error">{errors.confirmPassword}</div>
-          )}
-        </div>
-
-        <button className="submit-button">Reset Password</button>
-      </form>
+          </form>
+        )}
+      </Formik>
     </AuthLayout>
   );
 };

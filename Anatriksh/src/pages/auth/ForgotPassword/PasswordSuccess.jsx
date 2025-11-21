@@ -6,13 +6,13 @@ const PasswordSuccess = () => {
   const navigate = useNavigate();
 
   return (
-    <AuthLayout
-      title="Password Changed Successfully!"
-      subtitle="You can now log in with your new password"
-    >
+    <AuthLayout>
       <div className="success-container">
-        <img src="/Password_success.png" className="success-image" alt="success" />
-
+        <img
+          src="/Password_success.png"
+          className="success-image"
+          alt="success"
+        />
         <button
           type="button"
           className="submit-button"
