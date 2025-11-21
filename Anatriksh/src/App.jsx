@@ -1,7 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Dashboard from "./pages/admin/Dashboard";
-import Dashboard_layout from "./components/layout/Dashboard_layout";
+
 import Login from "./pages/auth/login/Login";
 import SignupStep1 from "./pages/auth/signup/SignupStep1";
 import SignupStep2 from "./pages/auth/signup/SignupStep2";
@@ -10,13 +9,15 @@ import OtpVerification from "./pages/auth/forgotPassword/OtpVerification";
 import PasswordSuccess from "./pages/auth/forgotPassword/PasswordSuccess";
 import SignupSuccess from "./pages/auth/Signup/SignupSuccess";
 import CreateNewPassword from "./pages/auth/ForgotPassword/CreateNewPassword";
+import DashboardLayout from "./components/dashboard/layout/DashboardLayout";
+import DashboardHome from "./pages/dashboard/DashboardHome";
 
 function App() {
   return (
     <Routes>
       {/* -------------- Dashboard Protected Layout --------------- */}
-      <Route element={<Dashboard_layout />}>
-        <Route path="/dashboard" element={<Dashboard />} />
+      <Route element={<DashboardLayout />}>
+        <Route path="/dashboard" element={<DashboardHome />} />
       </Route>
       {/* -------------- Default Redirect --------------- */}
       <Route path="/" element={<Navigate to="/login" replace />} />

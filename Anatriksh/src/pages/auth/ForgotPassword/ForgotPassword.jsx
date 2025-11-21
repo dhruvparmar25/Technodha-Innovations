@@ -1,40 +1,60 @@
 import React, { useState } from "react";
-import AuthLayout from "../../../components/auth/AuthLayout";
+import { FaAngleLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import AuthLayout from "../../../components/auth/AuthLayout";
+import AlertBox from "../../../components/common/AlertBox";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState({});
+  const [alert, setAlert] = useState({ type: "", message: "" });
 
-  const validateEmail = () => {
+  const validate = () => {
     let e = {};
-    let ok = true;
-
-    if (!email.trim()) (e.email = "Email required"), (ok = false);
-    else if (!email.includes("@")) (e.email = "Invalid email"), (ok = false);
+    if (!email.trim()) e.email = "Email is required";
+    else if (!email.includes("@")) e.email = "Enter a valid email";
 
     setErrors(e);
-    return ok;
+    return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = () => {
-    if (validateEmail()) {
-      navigate("/forgot/verify-otp");
+  const handleResetClick = () => {
+    if (!validate()) {
+      setAlert({ type: "error", message: "Please fix the errors above." });
+      return;
     }
+
+    setAlert({ type: "success", message: "OTP Sent to your email" });
+
+    setTimeout(() => navigate("/forgot/verify-otp"), 1500);
   };
 
   return (
-    <AuthLayout
-      title="Forgot Password?"
-      subtitle="Enter your email to get OTP"
-    >
+    <AuthLayout>
+      {alert.message && (
+        <AlertBox
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert({ type: "", message: "" })}
+        />
+      )}
+
       <form>
+        <div className="back-arrow" onClick={() => navigate("/login")}>
+          <FaAngleLeft size={20} color="#7C3AED" />
+        </div>
+
+        <div className="form-title">
+          <h1>Reset Your Password</h1>
+          <p>We will send a reset link to your email</p>
+        </div>
+
+        {/* Email */}
         <div className="form-group">
           <label>Email Address</label>
           <input
-            type="text"
             className="form-input"
             placeholder="Enter Your Email"
             value={email}
@@ -43,7 +63,7 @@ const ForgotPassword = () => {
           {errors.email && <p className="validation-error">{errors.email}</p>}
         </div>
 
-        <button type="button" className="submit-button" onClick={handleSubmit}>
+        <button type="button" className="submit-button" onClick={handleResetClick}>
           Send OTP
         </button>
 

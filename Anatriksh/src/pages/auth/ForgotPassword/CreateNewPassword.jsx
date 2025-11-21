@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import AuthLayout from "../../../components/auth/AuthLayout";
+import { FaRegEye, FaRegEyeSlash, FaAngleLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import AuthLayout from "../../../components/auth/AuthLayout";
+import AlertBox from "../../../components/common/AlertBox";
 
 const CreateNewPassword = () => {
   const navigate = useNavigate();
 
-  const [passwords, setPasswords] = useState({
+  const [form, setForm] = useState({
     newPassword: "",
     confirmPassword: "",
   });
@@ -16,97 +17,111 @@ const CreateNewPassword = () => {
     confirm: false,
   });
 
+  const [alert, setAlert] = useState({ type: "", message: "" });
   const [errors, setErrors] = useState({});
+
+  const toggle = (f) => setShow((p) => ({ ...p, [f]: !p[f] }));
 
   const validate = () => {
     let e = {};
-    let ok = true;
 
-    if (!passwords.newPassword.trim())
-      (e.newPassword = "Password required"), (ok = false);
-
-    if (!passwords.confirmPassword.trim())
-      (e.confirmPassword = "Confirm required"), (ok = false);
-
-    if (
-      passwords.newPassword &&
-      passwords.confirmPassword &&
-      passwords.newPassword !== passwords.confirmPassword
-    ) {
-      e.confirmPassword = "Passwords do not match";
-      ok = false;
-    }
+    if (form.newPassword.length < 6) e.newPassword = "Min 6 characters";
+    if (form.confirmPassword !== form.newPassword)
+      e.confirmPassword = "Passwords don't match";
 
     setErrors(e);
-    return ok;
+    return Object.keys(e).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validate()) navigate("/forgot/success");
+
+    if (!validate()) {
+      setAlert({ type: "error", message: "Fix the errors above" });
+      return;
+    }
+
+    setAlert({ type: "success", message: "Password changed successfully!" });
+
+    setTimeout(() => navigate("/forgot/success"), 1500);
   };
 
   return (
-    <AuthLayout title="Reset Password" subtitle="Enter your new password">
+    <AuthLayout>
+      {alert.message && (
+        <AlertBox
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert({ type: "", message: "" })}
+        />
+      )}
+
+      <div className="back-arrow" onClick={() => navigate("/forgot/verify-otp")}>
+        <FaAngleLeft size={20} color="#7C3AED" />
+      </div>
+
+      <div className="form-title">
+        <h1>Create New Password</h1>
+        <p>Set a strong password to secure your account</p>
+      </div>
+
       <form onSubmit={handleSubmit}>
+
         {/* New Password */}
-        <div className="form-group password-group">
+        <div className="form-group">
           <label>New Password</label>
           <div className="input-with-icon-container">
             <input
               type={show.new ? "text" : "password"}
               className="form-input"
               placeholder="Enter new password"
-              value={passwords.newPassword}
+              value={form.newPassword}
               onChange={(e) =>
-                setPasswords({ ...passwords, newPassword: e.target.value })
+                setForm({ ...form, newPassword: e.target.value })
               }
             />
+
             <button
               type="button"
-              onClick={() => setShow({ ...show, new: !show.new })}
+              className="password-toggle-button"
+              onClick={() => toggle("new")}
             >
               {show.new ? <FaRegEyeSlash /> : <FaRegEye />}
             </button>
           </div>
           {errors.newPassword && (
-            <p className="validation-error">{errors.newPassword}</p>
+            <div className="validation-error">{errors.newPassword}</div>
           )}
         </div>
 
-        {/* Confirm */}
-        <div className="form-group password-group">
+        {/* Confirm Password */}
+        <div className="form-group">
           <label>Confirm Password</label>
           <div className="input-with-icon-container">
             <input
               type={show.confirm ? "text" : "password"}
               className="form-input"
-              placeholder="Confirm new password"
-              value={passwords.confirmPassword}
+              placeholder="Re-enter password"
+              value={form.confirmPassword}
               onChange={(e) =>
-                setPasswords({
-                  ...passwords,
-                  confirmPassword: e.target.value,
-                })
+                setForm({ ...form, confirmPassword: e.target.value })
               }
             />
+
             <button
               type="button"
-              onClick={() =>
-                setShow({ ...show, confirm: !show.confirm })
-              }
+              className="password-toggle-button"
+              onClick={() => toggle("confirm")}
             >
               {show.confirm ? <FaRegEyeSlash /> : <FaRegEye />}
             </button>
           </div>
           {errors.confirmPassword && (
-            <p className="validation-error">{errors.confirmPassword}</p>
+            <div className="validation-error">{errors.confirmPassword}</div>
           )}
         </div>
 
-        <button className="submit-button" style={{ marginTop: 40 }}>
-          Reset Password
-        </button>
+        <button className="submit-button">Reset Password</button>
       </form>
     </AuthLayout>
   );

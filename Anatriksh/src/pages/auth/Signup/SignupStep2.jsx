@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaAngleLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../../../components/auth/AuthLayout";
+import AlertBox from "../../../components/common/AlertBox";
 
 const SignupStep2 = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const SignupStep2 = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [alert, setAlert] = useState({ type: "", message: "" });
 
   const validate = () => {
     let e = {};
@@ -30,14 +32,31 @@ const SignupStep2 = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validate()) navigate("/signup/success");
+
+    if (!validate()) {
+      setAlert({ type: "error", message: "Please fix the errors above" });
+      return;
+    }
+
+    setAlert({ type: "success", message: "Profile Completed!" });
+
+    setTimeout(() => navigate("/signup/success"), 2500);
   };
 
   return (
     <AuthLayout>
+      {/* ALERT BOX */}
+      {alert.message && (
+        <AlertBox
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert({ type: "", message: "" })}
+        />
+      )}
+
       <form onSubmit={handleSubmit}>
 
-        {/* Step Indicator */}
+        {/* STEP INDICATOR */}
         <div className="step-indicator">
           <div
             className="back-arrow"
@@ -53,7 +72,7 @@ const SignupStep2 = () => {
           </div>
         </div>
 
-        {/* Title */}
+        {/* TITLE */}
         <div className="form-title">
           <h1>Create Your Doctor Account</h1>
           <p>Join our platform to connect with patients securely</p>

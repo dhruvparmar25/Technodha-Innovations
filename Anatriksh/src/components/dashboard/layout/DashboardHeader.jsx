@@ -1,6 +1,6 @@
 import React from "react";
 
-function Dashboard_Header() {
+function DashboardHeader() {
   return (
     <header className="app-header">
       <div className="header-left">
@@ -22,4 +22,4 @@ function Dashboard_Header() {
   );
 }
 
-export default Dashboard_Header;
+export default DashboardHeader;

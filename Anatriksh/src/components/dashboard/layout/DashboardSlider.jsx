@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
-function Dashboard_slider() {
+function  DashboardSidebar() {
   return (
  <aside className="sidebar">
       <ul>
@@ -15,4 +15,4 @@ function Dashboard_slider() {
   )
 }
 
-export default Dashboard_slider
+export default  DashboardSidebar

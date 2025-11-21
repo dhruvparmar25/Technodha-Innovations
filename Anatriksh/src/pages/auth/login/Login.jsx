@@ -2,65 +2,86 @@ import React, { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import AuthLayout from "../../../components/auth/AuthLayout";
-import api from "../../../api/axiosClient";
+import AlertBox from "../../../components/common/AlertBox";
+import api from "../../../api/axiosClient"; // remove if not using API
 
 const Login = () => {
   const navigate = useNavigate();
 
+  // Form State
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+
+  // Errors
   const [errors, setErrors] = useState({});
-  const [alert, setAlert] = useState("");
 
-  const validateLogin = () => {
+  // AlertBox
+  const [alert, setAlert] = useState({ type: "", message: "" });
+
+  // Show Password
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () =>
+    setShowPassword((prev) => !prev);
+
+  // Validation
+  const validate = () => {
     let e = {};
-    let ok = true;
 
-    if (!email.trim()) (e.email = "Email is required"), (ok = false);
-    if (!email.includes("@")) (e.email = "Invalid email"), (ok = false);
-
-    if (!password.trim()) (e.password = "Password required"), (ok = false);
+    if (!email.includes("@")) e.email = "Invalid email";
+    if (password.length < 6) e.password = "Min 6 characters";
 
     setErrors(e);
-    return ok;
+    return Object.keys(e).length === 0;
   };
 
+  // Submit Login
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateLogin()) return;
+
+    if (!validate()) {
+      setAlert({ type: "error", message: "Please fix the errors above." });
+      return;
+    }
 
     try {
-      const response = await api.post("/users/login/", { email, password });
-      const user = response.data.data;
+      // API Request (if needed)
+      const res = await api.post("/users/login/", { email, password });
 
+      const user = res.data.data;
+
+      // Save token
       localStorage.setItem("access_token", user.access_token);
       localStorage.setItem("refresh_token", user.refresh_token);
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          id: user.id,
-          email: user.email,
-          role: user.role,
-        })
-      );
+      // Save user info
+      localStorage.setItem("user", JSON.stringify(user));
 
-      setAlert("Login Successful!");
-      setTimeout(() => navigate("/dashboard"), 1000);
-    } catch (error) {
-      setAlert(error.response?.data?.detail || "Invalid credentials");
+      setAlert({ type: "success", message: "Login Successful!" });
+
+      // Redirect after alert
+      setTimeout(() => navigate("/dashboard"), 3000);
+    } catch (err) {
+      setAlert({
+        type: "error",
+        message: err.response?.data?.detail || "Invalid credentials",
+      });
     }
   };
 
   return (
-    <AuthLayout
-      title="Welcome Back"
-      subtitle="Login to your doctor account"
-    >
-      {alert && <div className="alert-box error">{alert}</div>}
+    <AuthLayout title="Welcome Back" subtitle="Login to continue">
+
+      {/* ALERT BOX */}
+      {alert.message && (
+        <AlertBox
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert({ type: "", message: "" })}
+        />
+      )}
 
       <form onSubmit={handleSubmit}>
+        
         {/* Email */}
         <div className="form-group">
           <label>Email</label>
@@ -77,20 +98,19 @@ const Login = () => {
         {/* Password */}
         <div className="form-group password-group">
           <label>Password</label>
-
           <div className="input-with-icon-container">
             <input
               type={showPassword ? "text" : "password"}
               className="form-input"
-              placeholder="Enter password"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
 
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
               className="password-toggle-button"
+              onClick={togglePasswordVisibility}
             >
               {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
             </button>
@@ -101,18 +121,21 @@ const Login = () => {
           )}
         </div>
 
-        {/* Options */}
+        {/* Forgot password */}
         <div className="form-options-row">
-          <div>
-            <input type="checkbox" id="remember" /> Remember Me
-          </div>
-          <NavLink to="/forgot">Forgot Password?</NavLink>
+          <div></div>
+
+          <NavLink to="/forgot" className="forgot-password-link">
+            Forgot password?
+          </NavLink>
         </div>
 
-        <button className="submit-button">Login</button>
+        <button className="submit-button" type="submit">
+          Login
+        </button>
 
         <p className="toggel-btn">
-          Don’t have an account? <NavLink to="/signup/step1">Signup</NavLink>
+          Don't have an account? <NavLink to="/signup/step1">Signup</NavLink>
         </p>
       </form>
     </AuthLayout>

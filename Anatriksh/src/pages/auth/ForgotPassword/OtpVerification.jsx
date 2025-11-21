@@ -1,64 +1,86 @@
 import React, { useState, useRef } from "react";
-import AuthLayout from "../../../components/auth/AuthLayout";
+import { FaAngleLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import AuthLayout from "../../../components/auth/AuthLayout";
+import AlertBox from "../../../components/common/AlertBox";
 
 const OtpVerification = () => {
   const navigate = useNavigate();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [error, setError] = useState("");
+  const [alert, setAlert] = useState({ type: "", message: "" });
   const inputRefs = useRef([]);
 
-  const handleChange = (value, index) => {
-    if (!/^[0-9]?$/.test(value)) return;
+  const handleInput = (value, index) => {
+    if (/^[0-9]?$/.test(value)) {
+      const updated = [...otp];
+      updated[index] = value;
+      setOtp(updated);
 
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-
-    if (value && index < 5) inputRefs.current[index + 1].focus();
+      if (value && index < 5) {
+        inputRefs.current[index + 1].focus();
+      }
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleVerify = (e) => {
     e.preventDefault();
-
     const code = otp.join("");
 
     if (code.length !== 6) {
-      setError("Please enter a valid 6-digit OTP");
+      setAlert({ type: "error", message: "Enter a valid 6-digit OTP" });
       return;
     }
 
-    navigate("/forgot/create-new-password");
+    setAlert({ type: "success", message: "OTP Verified!" });
+
+    setTimeout(() => navigate("/forgot/create-new-password"), 1500);
   };
 
   return (
-    <AuthLayout
-      title="Verify OTP"
-      subtitle="Enter the 6-digit code sent to your email"
-    >
-      <form onSubmit={handleSubmit}>
-        <div style={{ display: "flex", gap: "25px" }}>
+    <AuthLayout>
+      {alert.message && (
+        <AlertBox
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert({ type: "", message: "" })}
+        />
+      )}
+
+      <div className="back-arrow" onClick={() => navigate("/forgot")}>
+        <FaAngleLeft size={20} color="#7C3AED" />
+      </div>
+
+      <div className="form-title">
+        <h1>Verify OTP</h1>
+        <p>Enter the 6-digit code sent to your email</p>
+      </div>
+
+      <form onSubmit={handleVerify}>
+        <div style={{ display: "flex", gap: "30px", marginTop: "25px" }}>
           {otp.map((digit, index) => (
             <input
               key={index}
+              type="text"
               maxLength="1"
-              value={digit}
-              className="otp-box"
               ref={(el) => (inputRefs.current[index] = el)}
-              onChange={(e) => handleChange(e.target.value, index)}
+              value={digit}
+              onChange={(e) => handleInput(e.target.value, index)}
+              className="otp-box"
             />
           ))}
         </div>
 
-        {error && <p className="validation-error">{error}</p>}
-
-        <button className="submit-button" style={{ marginTop: 20 }}>
+        <button type="submit" className="submit-button" style={{ marginTop: "25px" }}>
           Verify OTP
         </button>
 
-        <div className="secondary-button" style={{ marginTop: 10 }}>
-          <a href="/login">Back to Login</a>
-        </div>
+        <button
+          type="button"
+          className="secondary-button"
+          onClick={() => navigate("/login")}
+        >
+          Back to Login
+        </button>
       </form>
     </AuthLayout>
   );
