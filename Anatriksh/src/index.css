@@ -2,149 +2,149 @@
    ROOT VARIABLES (ONLY YOUR COLORS)
 ---------------------------------- */
 :root {
-  --color-background: #F6F5FA;
-  --color-primary: #7C3AED;
-  --color-secondary: #06B6D4;
-  --color-accent: #FF6B6B;
-  --color-border: #E5E0F0;
+    --color-background: #f6f5fa;
+    --color-primary: #7c3aed;
+    --color-secondary: #06b6d4;
+    --color-accent: #ff6b6b;
+    --color-border: #e5e0f0;
 
-  --color-text-primary: #1E1B4B;
-  --color-text-secondary: #6B728E;
-  --color-text-white: #ffffff;
+    --color-text-primary: #1e1b4b;
+    --color-text-secondary: #6b728e;
+    --color-text-white: #ffffff;
 
-  --font-primary: "Urbanist", sans-serif;
-  --font-secondary: "Manrope", sans-serif;
+    --font-primary: "Urbanist", sans-serif;
+    --font-secondary: "Manrope", sans-serif;
 }
 
 body {
-  font-family: var(--font-secondary);
-  margin: 0;
+    font-family: var(--font-secondary);
+    margin: 0;
 }
 
 /* ----------------------------------
    AUTH LAYOUT
 ---------------------------------- */
 .auth {
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  overflow: hidden;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    overflow: hidden;
 }
 
 .auth-img {
-  width: 50%;
-  background-color: var(--color-background);
-  overflow: hidden;
+    width: 50%;
+    background-color: var(--color-background);
+    overflow: hidden;
 }
 
 .bg-img img,
 .suc-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .logo {
-  padding: 40px 0 0 50px;
+    padding: 40px 0 0 50px;
 }
 
 /* ----------------------------------
    FORM SECTION
 ---------------------------------- */
 .auth-form {
-  width: 50%;
-  height: 100vh;
-  overflow-y: auto;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 30px;
+    width: 50%;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 30px;
 }
 
 .form-box {
-  max-width: 484px;
-  width: 100%;
-  margin: auto;
+    max-width: 484px;
+    width: 100%;
+    margin: auto;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
 }
 
 .form-group label {
-  color: var(--color-text-primary);
-      margin-bottom: 8px;
+    color: var(--color-text-primary);
+    margin-bottom: 8px;
 }
 
 .form-title h1 {
-  font-size: 34px;
-  color: var(--color-primary);
-  font-family: var(--font-primary);
+    font-size: 34px;
+    color: var(--color-primary);
+    font-family: var(--font-primary);
 }
 
 .form-title p {
-  font-size: 16px;
-  color: var(--color-text-secondary);
-  margin: 0;
+    font-size: 16px;
+    color: var(--color-text-secondary);
+    margin: 0;
 }
 
 .form-options-row {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
 }
 
 a,
 .active,
 .inactive {
-  color: var(--color-primary);
-  text-decoration: none;
+    color: var(--color-primary);
+    text-decoration: none;
 }
 
 /* ----------------------------------
    INPUTS
 ---------------------------------- */
 .input-with-icon-container {
-  position: relative;
-  display: flex;
-  align-items: center;
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .form-input {
-  width: 100%;
-  padding: 10px;
-  padding-right: 40px;
-  border: 1px solid transparent;
-  background-color: var(--color-background);
-  border-radius: 10px;
-  font-family: var(--font-secondary);
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px;
+    border: 1px solid transparent;
+    background-color: var(--color-background);
+    border-radius: 10px;
+    font-family: var(--font-secondary);
 }
 
 .form-input:focus {
-  border: 1px solid var(--color-border);
-  outline: none;
+    border: 1px solid var(--color-border);
+    outline: none;
 }
 
 .password-toggle-button {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text-secondary);
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-secondary);
 }
 
 .form-check-group {
-  display: flex;
-  gap: 10px;
+    display: flex;
+    gap: 10px;
 }
 
 .form-check-group label {
-  color: var(--color-text-secondary);
+    color: var(--color-text-secondary);
 }
 
 /* ----------------------------------
@@ -152,304 +152,308 @@ a,
 ---------------------------------- */
 .submit-button,
 .secondary-button {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  font-family: var(--font-secondary);
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    font-family: var(--font-secondary);
 }
 
 .submit-button {
-  margin-top: 16px;
-  background-color: var(--color-primary);
-  color: var(--color-text-white);
-  border: none;
-  transition: 0.3s;
+    margin-top: 16px;
+    background-color: var(--color-primary);
+    color: var(--color-text-white);
+    border: none;
+    transition: 0.3s;
 }
 
 .submit-button:hover:not(:disabled) {
-  background-color: #6a2dd9; /* Slight darker shade */
+    background-color: #6a2dd9; /* Slight darker shade */
 }
 
 .submit-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+    opacity: 0.7;
+    cursor: not-allowed;
 }
 
 .secondary-button {
-  margin-top: 15px;
-  background: var(--color-text-white);
-  border: 1px solid var(--color-primary);
-  color: var(--color-primary);
+    margin-top: 15px;
+    background: var(--color-text-white);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
 }
 
 /* ----------------------------------
    STATUS + SUCCESS
 ---------------------------------- */
 .toggel-btn {
-  text-align: center;
-  margin: 5px 0;
+    text-align: center;
+    margin: 5px 0;
 }
 
 .validation-error {
-  color: var(--color-accent);
-  padding: 4px 2px;
-  margin: 0;
+    color: var(--color-accent);
+    padding: 4px 2px;
+    margin: 0;
 }
 
 .success-container {
-  text-align: center;
+    text-align: center;
 }
 
 .success-container h2 {
-  font-size: 32px;
-  color: var(--color-primary);
-  font-family: var(--font-primary);
+    font-size: 32px;
+    color: var(--color-primary);
+    font-family: var(--font-primary);
 }
 
 .success-container p {
-  font-size: 16px;
-  color: var(--color-text-secondary);
+    font-size: 16px;
+    color: var(--color-text-secondary);
 }
 
 .success-image {
-  width: 100%;
+    width: 100%;
 }
 
 /* ----------------------------------
    STEP SYSTEM
 ---------------------------------- */
 .step-indicator {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-size: 14px;
-  color: var(--color-text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--color-text-secondary);
 }
 
 .step-indicator p {
-  margin: 0;
-  font-weight: 500;
+    margin: 0;
+    font-weight: 500;
 }
 
 .back-arrow {
-  cursor: pointer;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  border: 1px solid var(--color-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .progress-bar {
-  height: 13px;
-  border-radius: 10px;
-  background-color: var(--color-border);
-  overflow: hidden;
-  position: relative;
+    height: 13px;
+    border-radius: 10px;
+    background-color: var(--color-border);
+    overflow: hidden;
+    position: relative;
 }
 
 .progress-bar::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  background-color: var(--color-primary);
-  transition: 0.3s ease;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: var(--color-primary);
+    transition: 0.3s ease;
 }
 
 .progress-bar.step-1::after {
-  width: 50%;
+    width: 50%;
 }
 
 .progress-bar.step-2::after {
-  width: 100%;
+    width: 100%;
 }
 
 /* ----------------------------------
    OTP BOX
 ---------------------------------- */
 .otp-box {
-  width: 45px;
-  height: 45px;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  text-align: center;
-  font-size: 18px;
-  background: white;
+    width: 45px;
+    height: 45px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 18px;
+    background: white;
 }
 
 .otp-box:focus {
-  outline: none;
-  border: 2px solid var(--color-primary);
+    outline: none;
+    border: 2px solid var(--color-primary);
 }
 
 .email a {
-  color: var(--color-secondary);
+    color: var(--color-secondary);
 }
 
 /* ----------------------------------
    HEADER
 ---------------------------------- */
 .app-header {
-  width: 100%;
-  height: 120px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: white;
-  border-bottom: 1px solid var(--color-border);
-  padding: 20px 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 1000;
+    width: 100%;
+    height: 120px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: white;
+    border-bottom: 1px solid var(--color-border);
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
 }
 
 .header-right {
-  display: flex;
-  align-items: center;
-  gap: 35px;
+    display: flex;
+    align-items: center;
+    gap: 35px;
 }
 
 .user-info h5,
 .user-info p {
-  margin: 0;
+    margin: 0;
 }
 
 .user-info h5 {
-  font-size: 16px;
-  color: var(--color-text-primary);
+    font-size: 16px;
+    color: var(--color-text-primary);
 }
 
 .user-info p {
-  font-size: 12px;
-  color: var(--color-text-secondary);
+    font-size: 12px;
+    color: var(--color-text-secondary);
 }
 
 /* ----------------------------------
    SIDEBAR
 ---------------------------------- */
 .sidebar {
-  position: fixed;
-  top: 120px;
-  left: 0;
-  width: 20%;
-  height: calc(100vh - 120px);
-  background: var(--color-background);
-  border-right: 1px solid var(--color-border);
-  padding-top: 20px;
+    position: fixed;
+    top: 120px;
+    left: 0;
+    width: 20%;
+    height: calc(100vh - 120px);
+    background: var(--color-background);
+    border-right: 1px solid var(--color-border);
+    padding-top: 20px;
 }
 
 .nav-item {
-  display: block;
-  padding: 15px 20px;
-  font-size: 18px;
-  color: var(--color-text-primary);
+    display: block;
+    padding: 15px 20px;
+    font-size: 18px;
+    color: var(--color-text-primary);
 }
 
 .nav-item.active {
-  background: var(--color-border);
-  font-weight: bold;
+    background: var(--color-border);
+    font-weight: bold;
 }
 
 /* ----------------------------------
    CONTENT AREA
 ---------------------------------- */
 .content-area {
-  position: absolute;
-  top: 120px;
-  left: 20%;
-  width: 80%;
-  height: calc(100vh - 120px);
-  overflow-y: auto;
-  padding: 20px;
-  background: var(--color-background);
+    position: absolute;
+    top: 120px;
+    left: 20%;
+    width: 80%;
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+    padding: 20px;
+    background: var(--color-background);
 }
 
 /* ----------------------------------
    ALERTS
 ---------------------------------- */
 .custom-alert {
-  position: fixed;
-  top: 20px;
-  right: -350px;
-  width: 300px;
-  padding: 14px 18px;
-  border-radius: 8px;
-  color: white;
-  font-size: 15px;
-  z-index: 9999;
-  animation: slideIn 0.6s forwards, fadeOut 0.5s ease 2.5s forwards;
+    position: fixed;
+    top: 20px;
+    right: -350px;
+    width: 300px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    color: white;
+    font-size: 15px;
+    z-index: 9999;
+    animation: slideIn 0.6s forwards, fadeOut 0.5s ease 2.5s forwards;
 }
 
 .alert-success {
-  background-color: #28a745;
+    background-color: #28a745;
 }
 
 .alert-error,
 .alert-danger {
-  background-color: var(--color-accent);
+    background-color: var(--color-accent);
 }
 
 .alert-warning {
-  background-color: #ffc107;
-  color: #000;
+    background-color: #ffc107;
+    color: #000;
 }
 
 .alert-close-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
 }
 
 @keyframes slideIn {
-  from {
-    right: -350px;
-    opacity: 0;
-  }
-  to {
-    right: 20px;
-    opacity: 1;
-  }
+    from {
+        right: -350px;
+        opacity: 0;
+    }
+    to {
+        right: 20px;
+        opacity: 1;
+    }
 }
 
 @keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
 }
 
 /* Dashboard */
 .das-logo {
-  width: 76px;
-  height: 79px;
-  margin: auto;
+    width: 76px;
+    height: 79px;
+    margin: auto;
 }
 
 /* ----------------------------------
    RESPONSIVE
 ---------------------------------- */
 @media (max-width: 1024px) {
-  .auth {
-    flex-direction: column;
-  }
+    .auth {
+        flex-direction: column;
+    }
 
-  .auth-img {
-    width: 100%;
-    height: 250px;
-  }
+    .auth-img {
+        width: 100%;
+        height: 250px;
+    }
 
-  .logo {
-    padding: 10px;
-  }
+    .logo {
+        padding: 10px;
+    }
 
-  .auth-form {
-    width: 100%;
-    height: auto;
-    overflow-y: visible;
-  }
+    .auth-form {
+        width: 100%;
+        height: auto;
+        overflow-y: visible;
+    }
 }

@@ -1,35 +1,33 @@
-import React from 'react';
+import React from "react";
 
 const AuthLayout = ({ title, subtitle, children }) => {
-  return (
-    <div className="auth">
-      {/* Left Side: Fixed Image/Logo */}
-      <div className="auth-img">
-       <div className="logo">
-        <img src="/logo.png" alt="" />
-       </div>
-       <div className="bg-img">
-       <img src="/Background-img.png" />
+    return (
+        <div className="auth">
+            {/* Left Side: Fixed Image/Logo */}
+            <div className="auth-img">
+                <div className="logo">
+                    <img src="/logo.png" alt="" />
+                </div>
+                <div className="bg-img">
+                    <img src="/Background-img.png" />
+                </div>
+            </div>
 
-       </div>
+            {/* Right Side: Dynamic Content */}
+            <div className="auth-form">
+                <div className="form-box">
+                    <div className="form-title">
+                        {/* Title and Subtitle passed via props */}
+                        <h1>{title}</h1>
+                        <p>{subtitle}</p>
+                    </div>
 
-      </div>
-
-      {/* Right Side: Dynamic Content */}
-      <div className="auth-form">
-        <div className="form-box">
-          <div className="form-title">
-            {/* Title and Subtitle passed via props */}
-            <h1>{title}</h1>
-            <p>{subtitle}</p>
-          </div>
-          
-          {/* Main Form Content passed as children */}
-          {children}
+                    {/* Main Form Content passed as children */}
+                    {children}
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default AuthLayout;
