@@ -6,7 +6,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
 
-// Yup Validation (6-digit OTP)
+// Validation
 const OtpSchema = Yup.object().shape({
     otp: Yup.string()
         .matches(/^[0-9]{6}$/, "Enter a valid 6-digit OTP")
@@ -18,7 +18,7 @@ const OtpVerification = () => {
     const inputRefs = useRef([]);
     const [alert, setAlert] = useState({ type: "", message: "" });
 
-    // Move to next box automatically
+    // Handle OTP typing
     const handleInputChange = (value, index, otp, setFieldValue) => {
         if (/^[0-9]?$/.test(value)) {
             const newOtp = otp.split("");
@@ -27,20 +27,17 @@ const OtpVerification = () => {
 
             setFieldValue("otp", updatedOtp);
 
-            if (value && index < 5) {
-                inputRefs.current[index + 1].focus();
-            }
+            if (value && index < 5) inputRefs.current[index + 1].focus();
         }
     };
 
+    // Submit
     const handleSubmit = (values) => {
         console.log("OTP Submitted:", values.otp);
 
         setAlert({ type: "success", message: "OTP Verified Successfully!" });
 
-        setTimeout(() => {
-            navigate("/forgot/create-new-password");
-        }, 1500);
+        setTimeout(() => navigate("/forgot/create-new-password"), 1500);
     };
 
     return (
@@ -48,7 +45,7 @@ const OtpVerification = () => {
             title="Verify Your Email"
             subtitle="Enter the 6-digit OTP we’ve sent to your email:"
         >
-            {/* Alert Box */}
+            {/* Alert */}
             {alert.message && (
                 <AlertBox
                     type={alert.type}
@@ -68,7 +65,7 @@ const OtpVerification = () => {
             >
                 {({ values, errors, touched, setFieldValue, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
-                        {/* OTP INPUT BOXES */}
+                        {/* OTP Inputs */}
                         <div
                             style={{
                                 display: "flex",
@@ -97,7 +94,7 @@ const OtpVerification = () => {
                             ))}
                         </div>
 
-                        {/* Error Message */}
+                        {/* Error */}
                         {errors.otp && touched.otp && (
                             <p className="validation-error" style={{ textAlign: "center" }}>
                                 {errors.otp}

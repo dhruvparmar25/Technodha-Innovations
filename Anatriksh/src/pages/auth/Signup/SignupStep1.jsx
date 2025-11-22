@@ -6,9 +6,7 @@ import AlertBox from "../../../components/common/AlertBox";
 import { Formik } from "formik";
 import * as Yup from "Yup";
 
-// ------------------------------
-// Yup Validation Schema
-// ------------------------------
+// Validation
 const SignupStep1Schema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
     createPassword: Yup.string().min(6, "Minimum 6 characters").required("Password is required"),
@@ -20,29 +18,23 @@ const SignupStep1Schema = Yup.object().shape({
 const SignupStep1 = () => {
     const navigate = useNavigate();
 
-    // AlertBox state
+    // Alert
     const [alert, setAlert] = useState({ type: "", message: "" });
 
     // Password visibility
-    const [show, setShow] = useState({
-        create: false,
-        confirm: false,
-    });
-
+    const [show, setShow] = useState({ create: false, confirm: false });
     const toggle = (f) => setShow((p) => ({ ...p, [f]: !p[f] }));
 
+    // Next step
     const handleSubmitStep1 = (values) => {
-        // Save to localStorage
         localStorage.setItem("signupStep1", JSON.stringify(values));
-
         setAlert({ type: "success", message: "Step 1 completed!" });
-
         setTimeout(() => navigate("/signup/step2"), 1200);
     };
 
     return (
         <AuthLayout>
-            {/* ALERT BOX */}
+            {/* Alert */}
             {alert.message && (
                 <AlertBox
                     type={alert.type}
@@ -62,7 +54,7 @@ const SignupStep1 = () => {
             >
                 {({ values, errors, touched, handleChange, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
-                        {/* STEP INDICATOR */}
+                        {/* Step header */}
                         <div className="step-indicator">
                             <div className="back-arrow" onClick={() => navigate("/login")}>
                                 <FaAngleLeft size={20} color="#7C3AED" />
@@ -75,7 +67,7 @@ const SignupStep1 = () => {
                             </div>
                         </div>
 
-                        {/* FORM TITLE */}
+                        {/* Title */}
                         <div className="form-title">
                             <h1>Create Your Doctor Account</h1>
                             <p>Join our platform to connect with patients securely</p>
@@ -97,7 +89,7 @@ const SignupStep1 = () => {
                             )}
                         </div>
 
-                        {/* Create Password */}
+                        {/* Create password */}
                         <div className="form-group">
                             <label>Create Password</label>
 
@@ -125,7 +117,7 @@ const SignupStep1 = () => {
                             )}
                         </div>
 
-                        {/* Confirm Password */}
+                        {/* Confirm password */}
                         <div className="form-group">
                             <label>Confirm Password</label>
 
@@ -153,6 +145,7 @@ const SignupStep1 = () => {
                             )}
                         </div>
 
+                        {/* Continue */}
                         <button className="submit-button">Continue</button>
                     </form>
                 )}

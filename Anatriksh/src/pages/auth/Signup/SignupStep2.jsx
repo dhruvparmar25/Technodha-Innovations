@@ -6,10 +6,11 @@ import AlertBox from "../../../components/common/AlertBox";
 
 const SignupStep2 = () => {
     const navigate = useNavigate();
-    // Step1 ka data store karne ke liye
+
+    // Step1 data
     const [step1Data, setStep1Data] = useState(null);
-    // Step1 data load karega
-    // Load Step1 Data
+
+    // Load Step1
     useEffect(() => {
         const loadStep1 = () => {
             const saved = localStorage.getItem("signupStep1");
@@ -33,38 +34,33 @@ const SignupStep2 = () => {
     const [errors, setErrors] = useState({});
     const [alert, setAlert] = useState({ type: "", message: "" });
 
+    // Validate
     const validate = () => {
         let e = {};
-
         if (!form.name.trim()) e.name = "Name required";
         if (!form.specialization) e.specialization = "Select specialization";
         if (!form.clinic.trim()) e.clinic = "Clinic required";
         if (!/^[0-9]{10}$/.test(form.contact)) e.contact = "10-digit required";
-
         setErrors(e);
         return Object.keys(e).length === 0;
     };
 
+    // Submit
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!validate()) return;
-        // Combine Step1 + Step2
-        const finalData = {
-            ...step1Data,
-            ...form,
-        };
-        console.log("Final Signup Data:", finalData);
+
+        const finalData = { ...step1Data, ...form };
         localStorage.setItem("signupFinalData", JSON.stringify(finalData));
 
         setAlert({ type: "success", message: "Profile Completed!" });
 
-        setTimeout(() => {
-            navigate("/signup/success");
-        }, 1500);
+        setTimeout(() => navigate("/signup/success"), 1500);
     };
 
     return (
         <AuthLayout>
+            {/* Alert */}
             {alert.message && (
                 <AlertBox
                     type={alert.type}
@@ -74,7 +70,7 @@ const SignupStep2 = () => {
             )}
 
             <form onSubmit={handleSubmit}>
-                {/* STEP INDICATOR */}
+                {/* Step header */}
                 <div className="step-indicator">
                     <div className="back-arrow" onClick={() => navigate("/signup/step1")}>
                         <FaAngleLeft size={20} color="#7C3AED" />
@@ -87,7 +83,7 @@ const SignupStep2 = () => {
                     </div>
                 </div>
 
-                {/* FORM TITLE */}
+                {/* Title */}
                 <div className="form-title">
                     <h1>Create Your Doctor Account</h1>
                     <p>Join our platform to connect with patients securely</p>
@@ -163,6 +159,7 @@ const SignupStep2 = () => {
                     {errors.contact && <p className="validation-error">{errors.contact}</p>}
                 </div>
 
+                {/* Save */}
                 <button className="submit-button">Save Profile</button>
             </form>
         </AuthLayout>

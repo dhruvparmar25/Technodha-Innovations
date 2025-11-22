@@ -9,21 +9,21 @@ import AlertBox from "../../../components/common/AlertBox";
 const ForgotPassword = () => {
     const navigate = useNavigate();
 
+    // Alert
     const [alert, setAlert] = useState({ type: "", message: "" });
 
-    // Yup validation
+    // Validation
     const ForgotSchema = Yup.object().shape({
         email: Yup.string().email("Invalid email format").required("Email is required"),
     });
 
+    // Submit
     const handleSubmit = (values) => {
         console.log("Forgot Email:", values);
 
         setAlert({ type: "success", message: "Reset link sent to your email!" });
 
-        setTimeout(() => {
-            navigate("/forgot/verify-otp");
-        }, 1500);
+        setTimeout(() => navigate("/forgot/verify-otp"), 1500);
     };
 
     return (

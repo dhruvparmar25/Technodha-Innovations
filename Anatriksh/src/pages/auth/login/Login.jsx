@@ -6,6 +6,7 @@ import AlertBox from "../../../components/common/AlertBox";
 import api from "../../../api/axiosClient";
 import { Formik } from "formik";
 import * as Yup from "Yup";
+
 const LoginSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string().min(6, "Minimum 6 characters").required("Password is required"),
@@ -14,29 +15,25 @@ const LoginSchema = Yup.object().shape({
 const Login = () => {
     const navigate = useNavigate();
 
-    // AlertBox state
+    // Alert state
     const [alert, setAlert] = useState({ type: "", message: "" });
 
-    // Show / Hide Password
+    // Password toggle
     const [showPassword, setShowPassword] = useState(false);
     const togglePasswordVisibility = () => setShowPassword((p) => !p);
 
-    // Handle API Login
+    // Submit handler
     const handleLoginSubmit = async (values, { setSubmitting }) => {
         try {
             const res = await api.post("/users/login/", values);
-
             const user = res.data.data;
 
-            // Save tokens
+            // Store tokens + user
             localStorage.setItem("access_token", user.access_token);
             localStorage.setItem("refresh_token", user.refresh_token);
-
-            // Save user info
             localStorage.setItem("user", JSON.stringify(user));
 
             setAlert({ type: "success", message: "Login Successful!" });
-
             setTimeout(() => navigate("/dashboard"), 2500);
         } catch (err) {
             setAlert({
@@ -50,7 +47,7 @@ const Login = () => {
 
     return (
         <AuthLayout title="Welcome Back" subtitle="Login to continue">
-            {/* ALERT BOX */}
+            {/* Alert */}
             {alert.message && (
                 <AlertBox
                     type={alert.type}
@@ -110,7 +107,7 @@ const Login = () => {
                             )}
                         </div>
 
-                        {/* Forgot Password */}
+                        {/* Options */}
                         <div className="form-options-row">
                             <div className="form-check-group">
                                 <input
@@ -121,7 +118,6 @@ const Login = () => {
                                     checked={values.rememberMe}
                                     onChange={handleChange}
                                 />
-
                                 <label htmlFor="rememberMe" className="form-check-label">
                                     Remember me
                                 </label>
@@ -130,7 +126,7 @@ const Login = () => {
                             <NavLink to="/forgot">Forgot password?</NavLink>
                         </div>
 
-                        {/* Submit Button */}
+                        {/* Submit */}
                         <button type="submit" className="submit-button" disabled={isSubmitting}>
                             {isSubmitting ? "Logging in..." : "Login"}
                         </button>

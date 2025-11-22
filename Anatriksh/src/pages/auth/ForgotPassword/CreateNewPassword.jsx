@@ -7,9 +7,7 @@ import * as Yup from "Yup";
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
 
-// ------------------------------
-// Yup Validation Schema
-// ------------------------------
+// Validation
 const PasswordSchema = Yup.object().shape({
     newPassword: Yup.string()
         .min(6, "Password must be minimum 6 characters")
@@ -22,23 +20,20 @@ const PasswordSchema = Yup.object().shape({
 const CreateNewPassword = () => {
     const navigate = useNavigate();
 
-    const [show, setShow] = useState({
-        new: false,
-        confirm: false,
-    });
-
-    const [alert, setAlert] = useState({ type: "", message: "" });
-
+    // Password visibility
+    const [show, setShow] = useState({ new: false, confirm: false });
     const toggle = (field) => setShow((prev) => ({ ...prev, [field]: !prev[field] }));
 
+    // Alert
+    const [alert, setAlert] = useState({ type: "", message: "" });
+
+    // Submit
     const handleSubmitPassword = (values) => {
         console.log("Password Reset Data:", values);
 
         setAlert({ type: "success", message: "Password Reset Successfully!" });
 
-        setTimeout(() => {
-            navigate("/forgot/success");
-        }, 1500);
+        setTimeout(() => navigate("/forgot/success"), 1500);
     };
 
     return (
@@ -56,16 +51,13 @@ const CreateNewPassword = () => {
             )}
 
             <Formik
-                initialValues={{
-                    newPassword: "",
-                    confirmPassword: "",
-                }}
+                initialValues={{ newPassword: "", confirmPassword: "" }}
                 validationSchema={PasswordSchema}
                 onSubmit={handleSubmitPassword}
             >
                 {({ values, errors, touched, handleChange, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
-                        {/* NEW PASSWORD */}
+                        {/* New Password */}
                         <div className="form-group password-group">
                             <label>New Password</label>
                             <div className="input-with-icon-container">
@@ -77,7 +69,6 @@ const CreateNewPassword = () => {
                                     value={values.newPassword}
                                     onChange={handleChange}
                                 />
-
                                 <button
                                     type="button"
                                     className="password-toggle-button"
@@ -86,13 +77,12 @@ const CreateNewPassword = () => {
                                     {show.new ? <FaRegEyeSlash /> : <FaRegEye />}
                                 </button>
                             </div>
-
                             {errors.newPassword && touched.newPassword && (
                                 <p className="validation-error">{errors.newPassword}</p>
                             )}
                         </div>
 
-                        {/* CONFIRM PASSWORD */}
+                        {/* Confirm Password */}
                         <div className="form-group password-group">
                             <label>Confirm Password</label>
                             <div className="input-with-icon-container">
@@ -104,7 +94,6 @@ const CreateNewPassword = () => {
                                     value={values.confirmPassword}
                                     onChange={handleChange}
                                 />
-
                                 <button
                                     type="button"
                                     className="password-toggle-button"
@@ -113,7 +102,6 @@ const CreateNewPassword = () => {
                                     {show.confirm ? <FaRegEyeSlash /> : <FaRegEye />}
                                 </button>
                             </div>
-
                             {errors.confirmPassword && touched.confirmPassword && (
                                 <p className="validation-error">{errors.confirmPassword}</p>
                             )}

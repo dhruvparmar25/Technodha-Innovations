@@ -1,5 +1,5 @@
 /* ----------------------------------
-   ROOT VARIABLES (ONLY YOUR COLORS)
+   ROOT VARIABLES
 ---------------------------------- */
 :root {
     --color-background: #f6f5fa;
@@ -146,10 +146,12 @@ a,
 .form-check-group label {
     color: var(--color-text-secondary);
 }
+
 .form-check-input:checked {
     background-color: var(--color-primary);
     border-color: var(--color-primary);
 }
+
 /* ----------------------------------
    BUTTONS
 ---------------------------------- */
@@ -170,7 +172,7 @@ a,
 }
 
 .submit-button:hover:not(:disabled) {
-    background-color: #6a2dd9; /* Slight darker shade */
+    background-color: #6a2dd9;
 }
 
 .submit-button:disabled {
@@ -430,7 +432,7 @@ a,
     }
 }
 
-/* Dashboard */
+/* Logo inside dashboard */
 .das-logo {
     width: 76px;
     height: 79px;
@@ -438,9 +440,110 @@ a,
 }
 
 /* ----------------------------------
-   RESPONSIVE
+   RESPONSIVE DESIGN (FULL SYSTEM)
 ---------------------------------- */
-@media (max-width: 1024px) {
+
+/* ==================================
+   MOBILE ≤ 600px
+================================== */
+@media (max-width: 600px) {
+    /* AUTH LAYOUT */
+    .auth {
+        flex-direction: column;
+    }
+
+    .auth-img {
+        width: 100%;
+        height: 180px;
+    }
+
+    .logo {
+        padding: 20px;
+    }
+
+    .auth-form {
+        width: 100%;
+        height: auto;
+        padding: 20px;
+        overflow: visible;
+    }
+
+    .form-box {
+        padding: 0 5px;
+    }
+
+    .form-title h1 {
+        font-size: 26px;
+    }
+
+    .form-title p {
+        font-size: 14px;
+    }
+
+    .form-input {
+        font-size: 14px;
+    }
+
+    .submit-button,
+    .secondary-button {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    /* OTP BOX */
+    .otp-box {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    /* SUCCESS IMAGE */
+    .success-image {
+        width: 90%;
+    }
+
+    /* HEADER (DASHBOARD) */
+    .app-header {
+        height: 80px;
+        padding: 15px 20px;
+    }
+
+    .header-right {
+        gap: 15px;
+    }
+
+    /* SIDEBAR → COLLAPSE ON MOBILE */
+    .sidebar {
+        width: 230px;
+        left: -230px;
+        transition: 0.3s;
+        z-index: 2000;
+        position: fixed;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    /* CONTENT FULL WIDTH */
+    .content-area {
+        width: 100%;
+        left: 0;
+        padding: 15px;
+        top: 80px;
+    }
+
+    /* NAV ITEMS */
+    .nav-item {
+        font-size: 16px;
+    }
+}
+
+/* ==================================
+   TABLET 600px–1024px
+================================== */
+@media (min-width: 601px) and (max-width: 1024px) {
+    /* AUTH */
     .auth {
         flex-direction: column;
     }
@@ -450,13 +553,51 @@ a,
         height: 250px;
     }
 
-    .logo {
-        padding: 10px;
-    }
-
     .auth-form {
         width: 100%;
-        height: auto;
-        overflow-y: visible;
+        padding: 30px 40px;
+    }
+
+    .form-title h1 {
+        font-size: 30px;
+    }
+
+    /* DASHBOARD */
+    .sidebar {
+        width: 200px;
+    }
+
+    .content-area {
+        left: 200px;
+        width: calc(100% - 200px);
+    }
+}
+
+/* ==================================
+   SMALL LAPTOP 1024px–1280px
+================================== */
+@media (min-width: 1025px) and (max-width: 1280px) {
+    /* SIDEBAR */
+    .sidebar {
+        width: 18%;
+    }
+
+    /* CONTENT */
+    .content-area {
+        left: 18%;
+        width: 82%;
+    }
+}
+
+/* ==================================
+   LARGE DESKTOP ≥ 1280px
+================================== */
+@media (min-width: 1281px) {
+    .sidebar {
+        width: 20%;
+    }
+    .content-area {
+        left: 20%;
+        width: 80%;
     }
 }
