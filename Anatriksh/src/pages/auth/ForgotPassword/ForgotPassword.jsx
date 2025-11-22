@@ -20,7 +20,8 @@ const ForgotPassword = () => {
     // Submit
     const handleSubmit = (values) => {
         console.log("Forgot Email:", values);
-
+        // Save email for OTP screen
+        localStorage.setItem("forgot_email", values.email);
         setAlert({ type: "success", message: "Reset link sent to your email!" });
 
         setTimeout(() => navigate("/forgot/verify-otp"), 1500);

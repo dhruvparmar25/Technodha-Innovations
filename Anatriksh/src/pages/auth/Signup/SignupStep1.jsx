@@ -5,6 +5,7 @@ import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
 import { Formik } from "formik";
 import * as Yup from "Yup";
+import { registerUser } from "../../../services/authService";
 
 // Validation
 const SignupStep1Schema = Yup.object().shape({
@@ -17,24 +18,56 @@ const SignupStep1Schema = Yup.object().shape({
 
 const SignupStep1 = () => {
     const navigate = useNavigate();
-
-    // Alert
     const [alert, setAlert] = useState({ type: "", message: "" });
 
-    // Password visibility
+    // password visibility
     const [show, setShow] = useState({ create: false, confirm: false });
     const toggle = (f) => setShow((p) => ({ ...p, [f]: !p[f] }));
 
-    // Next step
-    const handleSubmitStep1 = (values) => {
-        localStorage.setItem("signupStep1", JSON.stringify(values));
-        setAlert({ type: "success", message: "Step 1 completed!" });
-        setTimeout(() => navigate("/signup/step2"), 1200);
+    const handleSubmitStep1 = async (values) => {
+        setAlert({ type: "", message: "" });
+
+        try {
+            const payload = {
+                email: values.email,
+                password: values.createPassword,
+                role: "doctor",
+            };
+
+            const res = await registerUser(payload);
+            const userId = res.data.id;
+
+            // SUCCESS RESPONSE → BACKEND DETAIL USE KARO
+            setAlert({
+                type: "success",
+                message: res.data?.detail || "Account created! Verify OTP.",
+            });
+            // Save email for OTP screen
+            localStorage.setItem("signup_email", values.email);
+            // store for step2
+            localStorage.setItem(
+                "signupStep1",
+                JSON.stringify({ email: values.email, password: values.createPassword })
+            );
+            localStorage.setItem("signup_user_id", userId);
+
+            setTimeout(() => navigate(`/signup/verify/${userId}`), 900);
+        } catch (err) {
+            // ERROR RESPONSE → BACKEND DETAIL FIRST PRIORITY
+            setAlert({
+                type: "error",
+                message:
+                    err.response?.data?.detail || // backend detail
+                    err.response?.data?.message || // backend message
+                    err.response?.data || // full backend response if string
+                    err.message || // JS error
+                    "Registration failed", // fallback
+            });
+        }
     };
 
     return (
         <AuthLayout>
-            {/* Alert */}
             {alert.message && (
                 <AlertBox
                     type={alert.type}
@@ -54,33 +87,29 @@ const SignupStep1 = () => {
             >
                 {({ values, errors, touched, handleChange, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
-                        {/* Step header */}
+                        {/* Header */}
                         <div className="step-indicator">
                             <div className="back-arrow" onClick={() => navigate("/login")}>
                                 <FaAngleLeft size={20} color="#7C3AED" />
                             </div>
-
                             <p>Step 1 of 2 — Basic Details</p>
-
                             <div className="progress-bar-container">
                                 <div className="progress-bar step-1"></div>
                             </div>
                         </div>
 
-                        {/* Title */}
                         <div className="form-title">
                             <h1>Create Your Doctor Account</h1>
                             <p>Join our platform to connect with patients securely</p>
                         </div>
 
-                        {/* Email */}
+                        {/* EMAIL */}
                         <div className="form-group">
                             <label>Email</label>
                             <input
-                                type="text"
-                                name="email"
                                 className="form-input"
-                                placeholder="Enter your email"
+                                name="email"
+                                placeholder="Enter email"
                                 value={values.email}
                                 onChange={handleChange}
                             />
@@ -89,10 +118,9 @@ const SignupStep1 = () => {
                             )}
                         </div>
 
-                        {/* Create password */}
+                        {/* PASSWORD */}
                         <div className="form-group">
                             <label>Create Password</label>
-
                             <div className="input-with-icon-container">
                                 <input
                                     type={show.create ? "text" : "password"}
@@ -102,25 +130,22 @@ const SignupStep1 = () => {
                                     value={values.createPassword}
                                     onChange={handleChange}
                                 />
-
                                 <button
                                     type="button"
-                                    className="password-toggle-button"
                                     onClick={() => toggle("create")}
+                                    className="password-toggle-button"
                                 >
                                     {show.create ? <FaRegEyeSlash /> : <FaRegEye />}
                                 </button>
                             </div>
-
                             {errors.createPassword && touched.createPassword && (
                                 <p className="validation-error">{errors.createPassword}</p>
                             )}
                         </div>
 
-                        {/* Confirm password */}
+                        {/* CONFIRM PASSWORD */}
                         <div className="form-group">
                             <label>Confirm Password</label>
-
                             <div className="input-with-icon-container">
                                 <input
                                     type={show.confirm ? "text" : "password"}
@@ -130,22 +155,19 @@ const SignupStep1 = () => {
                                     value={values.confirmPassword}
                                     onChange={handleChange}
                                 />
-
                                 <button
                                     type="button"
-                                    className="password-toggle-button"
                                     onClick={() => toggle("confirm")}
+                                    className="password-toggle-button"
                                 >
                                     {show.confirm ? <FaRegEyeSlash /> : <FaRegEye />}
                                 </button>
                             </div>
-
                             {errors.confirmPassword && touched.confirmPassword && (
                                 <p className="validation-error">{errors.confirmPassword}</p>
                             )}
                         </div>
 
-                        {/* Continue */}
                         <button className="submit-button">Continue</button>
                     </form>
                 )}

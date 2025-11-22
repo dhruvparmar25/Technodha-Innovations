@@ -25,20 +25,23 @@ const Login = () => {
     // Submit handler
     const handleLoginSubmit = async (values, { setSubmitting }) => {
         try {
-            const res = await api.post("/users/login/", values);
+            const res = await api.post("/v1/users/login/", values);
             const user = res.data.data;
+            console.log(res.data.detail);
 
             // Store tokens + user
             localStorage.setItem("access_token", user.access_token);
             localStorage.setItem("refresh_token", user.refresh_token);
             localStorage.setItem("user", JSON.stringify(user));
 
-            setAlert({ type: "success", message: "Login Successful!" });
+            setAlert({ type: "success", message: res.data.detail || "Login Successful1111111!" });
             setTimeout(() => navigate("/dashboard"), 2500);
         } catch (err) {
+            console.log("error", err);
+
             setAlert({
                 type: "error",
-                message: err.response?.data?.detail || "Invalid email or password",
+                message: err.response.data.detail || "Invalid email or password",
             });
         }
 

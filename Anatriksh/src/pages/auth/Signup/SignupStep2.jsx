@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { FaAngleLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
+
+import { loginUser, createDoctor } from "../../../services/authService";
 
 const SignupStep2 = () => {
     const navigate = useNavigate();
 
-    // Step1 data
+    // Load Step1 stored data
     const [step1Data, setStep1Data] = useState(null);
 
-    // Load Step1
     useEffect(() => {
-        const loadStep1 = () => {
-            const saved = localStorage.getItem("signupStep1");
-            if (saved) {
-                setStep1Data(JSON.parse(saved));
-                console.log("Step1 Loaded Data:", JSON.parse(saved));
-            }
-        };
-        loadStep1();
+        const saved = localStorage.getItem("signupStep1");
+        if (saved) {
+            setStep1Data(JSON.parse(saved));
+        }
     }, []);
 
-    // Step2 form
+    // Step2 form values
     const [form, setForm] = useState({
         name: "",
         specialization: "",
@@ -33,29 +31,88 @@ const SignupStep2 = () => {
 
     const [errors, setErrors] = useState({});
     const [alert, setAlert] = useState({ type: "", message: "" });
+    const [loading, setLoading] = useState(false);
 
-    // Validate
+    // Validate fields
     const validate = () => {
         let e = {};
         if (!form.name.trim()) e.name = "Name required";
         if (!form.specialization) e.specialization = "Select specialization";
         if (!form.clinic.trim()) e.clinic = "Clinic required";
-        if (!/^[0-9]{10}$/.test(form.contact)) e.contact = "10-digit required";
+        if (!/^[0-9]{10}$/.test(form.contact)) e.contact = "10-digit mobile required";
+
         setErrors(e);
         return Object.keys(e).length === 0;
     };
 
-    // Submit
-    const handleSubmit = (e) => {
+    // Submit profile + API calls
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validate()) return;
 
-        const finalData = { ...step1Data, ...form };
-        localStorage.setItem("signupFinalData", JSON.stringify(finalData));
+        if (!step1Data) {
+            setAlert({ type: "error", message: "Signup step 1 data missing. Please start again." });
+            return;
+        }
 
-        setAlert({ type: "success", message: "Profile Completed!" });
+        try {
+            setLoading(true);
+            setAlert({});
 
-        setTimeout(() => navigate("/signup/success"), 1500);
+            // 1️⃣ LOGIN to fetch tokens
+            const loginRes = await loginUser({
+                email: step1Data.email,
+                password: step1Data.password,
+            });
+
+            if (!loginRes.data?.data) {
+                throw new Error("Invalid login response");
+            }
+
+            const userData = loginRes.data.data;
+
+            // Save tokens
+            localStorage.setItem("access_token", userData.access_token);
+            localStorage.setItem("refresh_token", userData.refresh_token);
+
+            // Save user info
+            localStorage.setItem(
+                "user",
+                JSON.stringify({
+                    id: userData.id,
+                    email: userData.email,
+                    role: userData.role,
+                })
+            );
+
+            // 2️⃣ CREATE DOCTOR PROFILE (AUTH REQUIRED)
+            const payload = {
+                name: form.name,
+                specialty: form.specialization,
+                contact_number: form.contact,
+                hospital: form.clinic,
+            };
+
+            const doctorRes = await createDoctor(payload);
+
+            setAlert({
+                type: "success",
+                message: doctorRes.data?.detail || "Profile saved successfully!",
+            });
+
+            setTimeout(() => navigate("/signup/success"), 1500);
+        } catch (err) {
+            setAlert({
+                type: "error",
+                message:
+                    err.response?.data?.detail ||
+                    err.response?.data?.message ||
+                    err.message ||
+                    "Something went wrong",
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -70,7 +127,7 @@ const SignupStep2 = () => {
             )}
 
             <form onSubmit={handleSubmit}>
-                {/* Step header */}
+                {/* Header */}
                 <div className="step-indicator">
                     <div className="back-arrow" onClick={() => navigate("/signup/step1")}>
                         <FaAngleLeft size={20} color="#7C3AED" />
@@ -160,7 +217,9 @@ const SignupStep2 = () => {
                 </div>
 
                 {/* Save */}
-                <button className="submit-button">Save Profile</button>
+                <button className="submit-button" disabled={loading}>
+                    {loading ? "Saving..." : "Save Profile"}
+                </button>
             </form>
         </AuthLayout>
     );

@@ -1,10 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Formik } from "formik";
 import * as Yup from "Yup";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useParams, useLocation } from "react-router-dom";
 
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
+import { verifyOtp } from "../../../services/authService";
 
 // Validation
 const OtpSchema = Yup.object().shape({
@@ -14,11 +15,34 @@ const OtpSchema = Yup.object().shape({
 });
 
 const OtpVerification = () => {
+    const [email, setEmail] = useState("");
+
+    useEffect(() => {
+        const forgotEmail = localStorage.getItem("forgot_email");
+        const signupEmail = localStorage.getItem("signup_email");
+        setEmail(forgotEmail || signupEmail || "");
+    }, []);
+
     const navigate = useNavigate();
+    const { id } = useParams(); // only for signup
+    const location = useLocation();
+
     const inputRefs = useRef([]);
     const [alert, setAlert] = useState({ type: "", message: "" });
 
-    // Handle OTP typing
+    // Mode detection
+    const isSignup = location.pathname.includes("/signup");
+    const isForgot = location.pathname.includes("/forgot");
+
+    // For signup: ensure ID exists
+    useEffect(() => {
+        if (isSignup && !id) {
+            const saved = localStorage.getItem("signup_user_id");
+            if (saved) navigate(`/signup/verify/${saved}`);
+        }
+    }, [id, isSignup, navigate]);
+
+    // Handle OTP input box logic
     const handleInputChange = (value, index, otp, setFieldValue) => {
         if (/^[0-9]?$/.test(value)) {
             const newOtp = otp.split("");
@@ -31,18 +55,45 @@ const OtpVerification = () => {
         }
     };
 
-    // Submit
-    const handleSubmit = (values) => {
-        console.log("OTP Submitted:", values.otp);
+    // Submit OTP
+    const handleSubmitOtp = async (values) => {
+        try {
+            const otp = values.otp;
 
-        setAlert({ type: "success", message: "OTP Verified Successfully!" });
+            // ===== SIGNUP OTP VERIFY =====
+            if (isSignup) {
+                if (!id) throw new Error("Invalid user ID");
 
-        setTimeout(() => navigate("/forgot/create-new-password"), 1500);
+                await verifyOtp(id, { otp });
+
+                setAlert({ type: "success", message: "OTP Verified Successfully!" });
+
+                setTimeout(() => navigate("/signup/step2"), 1200);
+                return;
+            }
+
+            // ===== FORGOT PASSWORD OTP VERIFY =====
+            if (isForgot) {
+                // TODO: use your forgot-password API here later
+                setAlert({ type: "success", message: "OTP Verified Successfully!" });
+
+                setTimeout(() => navigate("/forgot/create-new-password"), 1200);
+                return;
+            }
+        } catch (err) {
+            setAlert({
+                type: "error",
+                message:
+                    err.response?.data?.detail ||
+                    err.response?.data?.message ||
+                    "OTP verification failed",
+            });
+        }
     };
 
     return (
         <AuthLayout
-            title="Verify Your Email"
+            title={isSignup ? "Verify Your Email" : "Verify OTP"}
             subtitle="Enter the 6-digit OTP we’ve sent to your email:"
         >
             {/* Alert */}
@@ -53,19 +104,18 @@ const OtpVerification = () => {
                     onClose={() => setAlert({ type: "", message: "" })}
                 />
             )}
-
             <div className="email">
-                <a href="#">doctor@example.com</a>
+                <a href="#">{email}</a>
             </div>
 
             <Formik
                 initialValues={{ otp: "" }}
                 validationSchema={OtpSchema}
-                onSubmit={handleSubmit}
+                onSubmit={handleSubmitOtp}
             >
-                {({ values, errors, touched, setFieldValue, handleSubmit }) => (
+                {({ values, errors, touched, handleSubmit, setFieldValue }) => (
                     <form onSubmit={handleSubmit}>
-                        {/* OTP Inputs */}
+                        {/* OTP input boxes */}
                         <div
                             style={{
                                 display: "flex",
@@ -94,7 +144,7 @@ const OtpVerification = () => {
                             ))}
                         </div>
 
-                        {/* Error */}
+                        {/* Error text */}
                         {errors.otp && touched.otp && (
                             <p className="validation-error" style={{ textAlign: "center" }}>
                                 {errors.otp}
@@ -102,9 +152,8 @@ const OtpVerification = () => {
                         )}
 
                         <div style={{ marginTop: "10px", textAlign: "center" }}>
-                            Didn’t receive the code?
+                            Didn't receive the code?
                             <NavLink to="#" style={{ color: "var(--color-primary)" }}>
-                                {" "}
                                 Resend OTP
                             </NavLink>
                         </div>

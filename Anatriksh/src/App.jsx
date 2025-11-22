@@ -25,6 +25,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             {/* Signup */}
             <Route path="/signup/step1" element={<SignupStep1 />} />
+            <Route path="/signup/verify/:id" element={<OtpVerification />} />
+
             <Route path="/signup/step2" element={<SignupStep2 />} />
             <Route path="/signup/success" element={<SignupSuccess />} />
             {/* Forgot Password */}
