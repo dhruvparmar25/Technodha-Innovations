@@ -1,226 +1,244 @@
-import React, { useState, useEffect } from "react";
+// Signup Step 2 (doctor profile)
+import React, { useState } from "react";
 import { FaAngleLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
-
+import { Formik } from "formik";
+import * as yup from "yup";
+import Select from "react-select";
 import { loginUser, createDoctor } from "../../../services/authService";
 import { specializationOptions } from "../../../data/specializations";
-import Select from "react-select";
+
+// Validation
+const Step2Schema = yup.object().shape({
+    name: yup.string().required("Required"),
+    specialization: yup.string().required("Required"),
+    clinic: yup.string().required("Required"),
+    licenseNumber: yup.string().nullable(),
+    contact: yup
+        .string()
+        .matches(/^[0-9]{10}$/, "Invalid number")
+        .required("Required"),
+});
 
 const SignupStep2 = () => {
     const navigate = useNavigate();
 
-    // Step 1 stored data (email + password)
-    const [step1Data, setStep1Data] = useState(null);
+    // Load signup step1 data once (fixed)
+    const savedEmail = localStorage.getItem("signup_email") || "";
+    const savedPassword = sessionStorage.getItem("signup_password") || "";
 
-    useEffect(() => {
-        const saved = localStorage.getItem("signupStep1");
-        if (saved) setStep1Data(JSON.parse(saved));
-    }, []);
-
-    // Form state
-    const [form, setForm] = useState({
-        name: "",
-        specialization: "",
-        clinic: "",
-        licenseNumber: "",
-        contact: "",
+    // Initial state (safe, no useEffect)
+    const [step1Data] = useState({
+        email: savedEmail,
+        password: savedPassword,
     });
 
-    const [errors, setErrors] = useState({});
+    // Alert + loading
     const [alert, setAlert] = useState({ type: "", message: "" });
     const [loading, setLoading] = useState(false);
 
-    // Basic field validation
-    const validate = () => {
-        let e = {};
-        if (!form.name.trim()) e.name = "Name required";
-        if (!form.specialization) e.specialization = "Select specialization";
-        if (!form.clinic.trim()) e.clinic = "Clinic required";
-        if (!/^[0-9]{10}$/.test(form.contact)) e.contact = "10-digit mobile required";
-        setErrors(e);
-        return Object.keys(e).length === 0;
-    };
+    // Submit handler
+    const handleSubmit = async (values, { setSubmitting }) => {
+        setAlert({});
 
-    // Handle submit: login (to get token) → create doctor profile
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!validate()) return;
-
-        if (!step1Data) {
-            setAlert({
-                type: "error",
-                message: "Signup step 1 data missing. Please start again.",
-            });
+        // Check missing step1 data
+        if (!step1Data.email || !step1Data.password) {
+            setAlert({ type: "error", message: "Step 1 missing. Start signup again." });
+            setSubmitting(false);
             return;
         }
 
         try {
             setLoading(true);
-            setAlert({});
 
-            // Step 1: Login to get tokens
+            // Login to get tokens
             const loginRes = await loginUser({
                 email: step1Data.email,
                 password: step1Data.password,
             });
 
-            const userData = loginRes.data?.data;
-            if (!userData) throw new Error("Invalid login response");
+            const user = loginRes.data?.data;
 
             // Save tokens
-            localStorage.setItem("access_token", userData.access_token);
-            localStorage.setItem("refresh_token", userData.refresh_token);
+            localStorage.setItem("access_token", user.access_token);
+            if (user.refresh_token) {
+                localStorage.setItem("refresh_token", user.refresh_token);
+            }
 
             // Save basic user info
             localStorage.setItem(
                 "user",
                 JSON.stringify({
-                    id: userData.id,
-                    email: userData.email,
-                    role: userData.role,
+                    id: user.id,
+                    email: user.email,
+                    role: user.role,
                 })
             );
 
-            // Step 2: Create doctor profile
+            // Doctor profile payload
             const payload = {
-                name: form.name,
-                specialty: form.specialization,
-                contact_number: form.contact,
-                hospital: form.clinic,
-                license_number: form.licenseNumber || null,
+                name: values.name,
+                specialty: values.specialization,
+                contact_number: values.contact,
+                hospital: values.clinic,
+                license_number: values.licenseNumber || null,
             };
 
-            const doctorRes = await createDoctor(payload);
+            // Create profile
+            await createDoctor(payload);
 
-            setAlert({
-                type: "success",
-                message: doctorRes.data?.detail || "Profile saved successfully!",
-            });
+            setAlert({ type: "success", message: "Profile created" });
 
-            setTimeout(() => navigate("/signup/success"), 1500);
+            // Remove temp password
+            sessionStorage.removeItem("signup_password");
+
+            navigate("/signup/success");
         } catch (err) {
             setAlert({
                 type: "error",
                 message:
                     err.response?.data?.detail ||
                     err.response?.data?.message ||
-                    err.message ||
                     "Something went wrong",
             });
-        } finally {
-            setLoading(false);
         }
+
+        setLoading(false);
+        setSubmitting(false);
     };
 
     return (
         <AuthLayout>
-            {/* Alert Notification */}
+            {/* Alert */}
             {alert.message && (
-                <AlertBox
-                    type={alert.type}
-                    message={alert.message}
-                    onClose={() => setAlert({ type: "", message: "" })}
-                />
+                <AlertBox type={alert.type} message={alert.message} onClose={() => setAlert({})} />
             )}
 
-            <form onSubmit={handleSubmit}>
-                {/* Header */}
-                <div className="step-indicator">
-                    <div className="back-arrow" onClick={() => navigate("/signup/step1")}>
-                        <FaAngleLeft size={20} color="#7C3AED" />
-                    </div>
-
-                    <p>Step 2 of 2 — Professional Details</p>
-
-                    <div className="progress-bar-container">
-                        <div className="progress-bar step-2"></div>
-                    </div>
+            {/* Header */}
+            <div className="step-indicator">
+                <div className="back-arrow" onClick={() => navigate("/signup/step1")}>
+                    <FaAngleLeft size={20} color="#7C3AED" />
                 </div>
-
-                {/* Title */}
-                <div className="form-title">
-                    <h1>Create Your Doctor Account</h1>
-                    <p>Join our platform to connect with patients securely</p>
+                <p>Step 2 of 2 — Professional Details</p>
+                <div className="progress-bar-container">
+                    <div className="progress-bar step-2"></div>
                 </div>
+            </div>
 
-                {/* Name */}
-                <div className="form-group">
-                    <label>Name</label>
-                    <input
-                        className="form-input"
-                        name="name"
-                        placeholder="Enter name"
-                        value={form.name}
-                        onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    />
-                    {errors.name && <p className="validation-error">{errors.name}</p>}
-                </div>
-                {/* Specialization */}
-                <div className="form-group">
-                    <label>Specialization</label>
+            <div className="form-title">
+                <h1>Create Your Doctor Account</h1>
+                <p>Enter your professional details</p>
+            </div>
 
-                    <Select
-                        className="react-select-container"
-                        classNamePrefix="react-select"
-                        options={specializationOptions}
-                        placeholder="Select specialization"
-                        isSearchable={true}
-                        onChange={(option) =>
-                            setForm({ ...form, specialization: option?.value || "" })
-                        }
-                    />
+            {/* Form */}
+            <Formik
+                initialValues={{
+                    name: "",
+                    specialization: "",
+                    clinic: "",
+                    licenseNumber: "",
+                    contact: "",
+                }}
+                validationSchema={Step2Schema}
+                onSubmit={handleSubmit}
+            >
+                {({
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleSubmit,
+                    setFieldValue,
+                    isSubmitting,
+                }) => (
+                    <form onSubmit={handleSubmit}>
+                        {/* Name */}
+                        <div className="form-group">
+                            <label>Name</label>
+                            <input
+                                className="form-input"
+                                name="name"
+                                placeholder="Enter name"
+                                value={values.name}
+                                onChange={handleChange}
+                            />
+                            {errors.name && touched.name && (
+                                <p className="validation-error">{errors.name}</p>
+                            )}
+                        </div>
 
-                    {errors.specialization && (
-                        <p className="validation-error">{errors.specialization}</p>
-                    )}
-                </div>
+                        {/* Specialization */}
+                        <div className="form-group">
+                            <label>Specialization</label>
+                            <Select
+                                className="react-select-container"
+                                classNamePrefix="react-select"
+                                options={specializationOptions}
+                                placeholder="Select specialization"
+                                onChange={(opt) =>
+                                    setFieldValue("specialization", opt?.value || "")
+                                }
+                            />
+                            {errors.specialization && touched.specialization && (
+                                <p className="validation-error">{errors.specialization}</p>
+                            )}
+                        </div>
 
-                {/* Clinic */}
-                <div className="form-group">
-                    <label>Clinic / Hospital</label>
-                    <input
-                        className="form-input"
-                        name="clinic"
-                        placeholder="Enter clinic name"
-                        value={form.clinic}
-                        onChange={(e) => setForm({ ...form, clinic: e.target.value })}
-                    />
-                    {errors.clinic && <p className="validation-error">{errors.clinic}</p>}
-                </div>
+                        {/* Clinic */}
+                        <div className="form-group">
+                            <label>Clinic / Hospital</label>
+                            <input
+                                className="form-input"
+                                name="clinic"
+                                placeholder="Enter clinic"
+                                value={values.clinic}
+                                onChange={handleChange}
+                            />
+                            {errors.clinic && touched.clinic && (
+                                <p className="validation-error">{errors.clinic}</p>
+                            )}
+                        </div>
 
-                {/* License Number (optional) */}
-                <div className="form-group">
-                    <label>License Number (Optional)</label>
-                    <input
-                        className="form-input"
-                        name="licenseNumber"
-                        placeholder="Enter license"
-                        value={form.licenseNumber}
-                        onChange={(e) => setForm({ ...form, licenseNumber: e.target.value })}
-                    />
-                </div>
+                        {/* License */}
+                        <div className="form-group">
+                            <label>License Number (Optional)</label>
+                            <input
+                                className="form-input"
+                                name="licenseNumber"
+                                placeholder="Enter license"
+                                value={values.licenseNumber}
+                                onChange={handleChange}
+                            />
+                        </div>
 
-                {/* Contact */}
-                <div className="form-group">
-                    <label>Contact</label>
-                    <input
-                        className="form-input"
-                        name="contact"
-                        placeholder="10-digit mobile"
-                        value={form.contact}
-                        onChange={(e) => setForm({ ...form, contact: e.target.value })}
-                    />
-                    {errors.contact && <p className="validation-error">{errors.contact}</p>}
-                </div>
+                        {/* Contact */}
+                        <div className="form-group">
+                            <label>Contact</label>
+                            <input
+                                className="form-input"
+                                name="contact"
+                                placeholder="10-digit mobile"
+                                value={values.contact}
+                                onChange={handleChange}
+                            />
+                            {errors.contact && touched.contact && (
+                                <p className="validation-error">{errors.contact}</p>
+                            )}
+                        </div>
 
-                {/* Save Button */}
-                <button type="submit" className="submit-button" disabled={loading}>
-                    {loading ? "Saving..." : "Save Profile"}
-                </button>
-            </form>
+                        {/* Save */}
+                        <button
+                            type="submit"
+                            className="submit-button"
+                            disabled={loading || isSubmitting}
+                        >
+                            {loading ? "Saving..." : "Save Profile"}
+                        </button>
+                    </form>
+                )}
+            </Formik>
         </AuthLayout>
     );
 };

@@ -1,48 +1,42 @@
+// Create new password page
 import React, { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as yup from "yup";
-
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
 
 // Validation
 const PasswordSchema = yup.object().shape({
-    newPassword: yup
-        .string()
-        .min(6, "Password must be minimum 6 characters")
-        .required("New password is required"),
+    newPassword: yup.string().min(6, "Min 6 characters").required("Required"),
     confirmPassword: yup
         .string()
-        .oneOf([yup.ref("newPassword"), null], "Passwords do not match")
-        .required("Confirm password is required"),
+        .oneOf([yup.ref("newPassword")], "Passwords not same")
+        .required("Required"),
 });
 
 const CreateNewPassword = () => {
     const navigate = useNavigate();
 
-    // Password visibility
+    // Show/hide password
     const [show, setShow] = useState({ new: false, confirm: false });
-    const toggle = (field) => setShow((prev) => ({ ...prev, [field]: !prev[field] }));
 
     // Alert
     const [alert, setAlert] = useState({ type: "", message: "" });
 
-    // Submit
+    // Submit handler
     const handleSubmitPassword = (values) => {
-        console.log("Password Reset Data:", values);
+        // Call backend here (currently mock)
+        console.log("New password:", values);
 
-        setAlert({ type: "success", message: "Password Reset Successfully!" });
+        setAlert({ type: "success", message: "Password updated" });
 
-        setTimeout(() => navigate("/forgot/success"), 1500);
+        navigate("/forgot/success");
     };
 
     return (
-        <AuthLayout
-            title="Create New Password"
-            subtitle="Set a strong password to protect your account."
-        >
+        <AuthLayout title="Create New Password" subtitle="Enter your new password">
             {/* Alert */}
             {alert.message && (
                 <AlertBox
@@ -52,6 +46,7 @@ const CreateNewPassword = () => {
                 />
             )}
 
+            {/* Form */}
             <Formik
                 initialValues={{ newPassword: "", confirmPassword: "" }}
                 validationSchema={PasswordSchema}
@@ -67,14 +62,16 @@ const CreateNewPassword = () => {
                                     type={show.new ? "text" : "password"}
                                     className="form-input"
                                     name="newPassword"
-                                    placeholder="Enter New Password"
+                                    placeholder="New password"
                                     value={values.newPassword}
                                     onChange={handleChange}
                                 />
+
+                                {/* Toggle */}
                                 <button
                                     type="button"
                                     className="password-toggle-button"
-                                    onClick={() => toggle("new")}
+                                    onClick={() => setShow((p) => ({ ...p, new: !p.new }))}
                                 >
                                     {show.new ? <FaRegEyeSlash /> : <FaRegEye />}
                                 </button>
@@ -92,14 +89,16 @@ const CreateNewPassword = () => {
                                     type={show.confirm ? "text" : "password"}
                                     className="form-input"
                                     name="confirmPassword"
-                                    placeholder="Re-enter New Password"
+                                    placeholder="Confirm password"
                                     value={values.confirmPassword}
                                     onChange={handleChange}
                                 />
+
+                                {/* Toggle */}
                                 <button
                                     type="button"
                                     className="password-toggle-button"
-                                    onClick={() => toggle("confirm")}
+                                    onClick={() => setShow((p) => ({ ...p, confirm: !p.confirm }))}
                                 >
                                     {show.confirm ? <FaRegEyeSlash /> : <FaRegEye />}
                                 </button>
@@ -109,6 +108,7 @@ const CreateNewPassword = () => {
                             )}
                         </div>
 
+                        {/* Submit */}
                         <button
                             type="submit"
                             className="submit-button"

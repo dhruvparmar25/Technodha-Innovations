@@ -1,28 +1,31 @@
+// Auth page layout wrapper
 import React from "react";
 
-const AuthLayout = ({ title, subtitle, children }) => {
+const AuthLayout = ({ title = "", subtitle = "", children }) => {
     return (
         <div className="auth">
-            {/* Left Side: Fixed Image/Logo */}
+            {/* Left side image */}
             <div className="auth-img">
                 <div className="logo">
-                    <img src="/logo.png" alt="" />
+                    <img src="/logo.png" alt="Logo" />
                 </div>
                 <div className="bg-img">
-                    <img src="/Background-img.png" />
+                    <img src="/Background-img.png" alt="Background" />
                 </div>
             </div>
 
-            {/* Right Side: Dynamic Content */}
+            {/* Right side form */}
             <div className="auth-form">
                 <div className="form-box">
-                    <div className="form-title">
-                        {/* Title and Subtitle passed via props */}
-                        <h1>{title}</h1>
-                        <p>{subtitle}</p>
-                    </div>
+                    {/* Page title */}
+                    {title || subtitle ? (
+                        <div className="form-title">
+                            <h1>{title}</h1>
+                            {subtitle && <p>{subtitle}</p>}
+                        </div>
+                    ) : null}
 
-                    {/* Main Form Content passed as children */}
+                    {/* Main content */}
                     {children}
                 </div>
             </div>

@@ -1,3 +1,4 @@
+// App routes
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
@@ -15,21 +16,24 @@ import SignupSuccess from "./pages/auth/signup/SignupSuccess";
 function App() {
     return (
         <Routes>
-            {/* -------------- Dashboard Protected Layout --------------- */}
+            {/* Protected dashboard */}
             <Route element={<DashboardLayout />}>
                 <Route path="/dashboard" element={<DashboardHome />} />
             </Route>
-            {/* -------------- Default Redirect --------------- */}
+
+            {/* Redirect root */}
             <Route path="/" element={<Navigate to="/login" replace />} />
+
             {/* Login */}
             <Route path="/login" element={<Login />} />
-            {/* Signup */}
+
+            {/* Signup flow */}
             <Route path="/signup/step1" element={<SignupStep1 />} />
             <Route path="/signup/verify/:id" element={<OtpVerification />} />
-
             <Route path="/signup/step2" element={<SignupStep2 />} />
             <Route path="/signup/success" element={<SignupSuccess />} />
-            {/* Forgot Password */}
+
+            {/* Forgot password flow */}
             <Route path="/forgot" element={<ForgotPassword />} />
             <Route path="/forgot/verify-otp" element={<OtpVerification />} />
             <Route path="/forgot/create-new-password" element={<CreateNewPassword />} />

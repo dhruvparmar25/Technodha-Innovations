@@ -1,34 +1,34 @@
+// Forgot password page
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as yup from "yup";
-
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
+
+// Validation
+const ForgotSchema = yup.object().shape({
+    email: yup.string().email("Invalid email").required("Email required"),
+});
 
 const ForgotPassword = () => {
     const navigate = useNavigate();
 
-    // Alert
+    // Alert state
     const [alert, setAlert] = useState({ type: "", message: "" });
 
-    // Validation
-    const ForgotSchema = yup.object().shape({
-        email: yup.string().email("Invalid email format").required("Email is required"),
-    });
-
-    // Submit
+    // Submit handler
     const handleSubmit = (values) => {
-        console.log("Forgot Email:", values);
-        // Save email for OTP screen
+        // Save email for OTP page
         localStorage.setItem("forgot_email", values.email);
-        setAlert({ type: "success", message: "Reset link sent to your email!" });
 
-        setTimeout(() => navigate("/forgot/verify-otp"), 1500);
+        setAlert({ type: "success", message: "OTP sent to your email" });
+
+        navigate("/forgot/verify-otp");
     };
 
     return (
-        <AuthLayout title="Reset Your Password" subtitle="Enter your email to receive reset OTP">
+        <AuthLayout title="Reset Your Password" subtitle="Enter your email to get OTP">
             {/* Alert */}
             {alert.message && (
                 <AlertBox
@@ -38,6 +38,7 @@ const ForgotPassword = () => {
                 />
             )}
 
+            {/* Form */}
             <Formik
                 initialValues={{ email: "" }}
                 validationSchema={ForgotSchema}
@@ -51,7 +52,7 @@ const ForgotPassword = () => {
                             <input
                                 className="form-input"
                                 name="email"
-                                placeholder="Enter your email"
+                                placeholder="Enter email"
                                 value={values.email}
                                 onChange={handleChange}
                             />
@@ -60,10 +61,12 @@ const ForgotPassword = () => {
                             )}
                         </div>
 
+                        {/* Submit */}
                         <button type="submit" className="submit-button">
-                            Send Reset Link
+                            Send OTP
                         </button>
 
+                        {/* Back */}
                         <button
                             type="button"
                             className="secondary-button"
