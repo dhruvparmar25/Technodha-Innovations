@@ -15,8 +15,12 @@ const LoginSchema = yup.object().shape({
 const Login = () => {
     const navigate = useNavigate();
 
-    // Alert state
+    // Alert
     const [alert, setAlert] = useState({ type: "", message: "" });
+
+    // ⭐ Direct localStorage read (NO useEffect needed)
+    const savedEmail = localStorage.getItem("remember_email") || "";
+    const savedPassword = localStorage.getItem("remember_password") || "";
 
     // Password toggle
     const [showPassword, setShowPassword] = useState(false);
@@ -27,21 +31,27 @@ const Login = () => {
         try {
             const res = await api.post("/v1/users/login/", values);
             const user = res.data.data;
-            console.log(res.data.detail);
 
             // Store tokens + user
             localStorage.setItem("access_token", user.access_token);
             localStorage.setItem("refresh_token", user.refresh_token);
             localStorage.setItem("user", JSON.stringify(user));
 
-            setAlert({ type: "success", message: res.data.detail || "Login Successful1111111!" });
-            setTimeout(() => navigate("/dashboard"), 2500);
-        } catch (err) {
-            console.log("error", err);
+            // ⭐ Remember Me Logic (email + password)
+            if (values.rememberMe) {
+                localStorage.setItem("remember_email", values.email);
+                localStorage.setItem("remember_password", values.password);
+            } else {
+                localStorage.removeItem("remember_email");
+                localStorage.removeItem("remember_password");
+            }
 
+            setAlert({ type: "success", message: res.data.detail || "Login Successful!" });
+            setTimeout(() => navigate("/dashboard"), 2000);
+        } catch (err) {
             setAlert({
                 type: "error",
-                message: err.response.data.detail || "Invalid email or password",
+                message: err.response?.data?.detail || "Invalid email or password",
             });
         }
 
@@ -60,7 +70,12 @@ const Login = () => {
             )}
 
             <Formik
-                initialValues={{ email: "", password: "", rememberMe: false }}
+                initialValues={{
+                    email: savedEmail,
+                    password: savedPassword,
+                    rememberMe: savedEmail || savedPassword ? true : false,
+                }}
+                enableReinitialize={true}
                 validationSchema={LoginSchema}
                 onSubmit={handleLoginSubmit}
             >
