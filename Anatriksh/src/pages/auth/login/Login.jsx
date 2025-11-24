@@ -5,11 +5,11 @@ import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
 import api from "../../../api/axiosClient";
 import { Formik } from "formik";
-import * as Yup from "Yup";
+import * as yup from "yup";
 
-const LoginSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email").required("Email is required"),
-    password: Yup.string().min(6, "Minimum 6 characters").required("Password is required"),
+const LoginSchema = yup.object().shape({
+    email: yup.string().email("Invalid email").required("Email is required"),
+    password: yup.string().min(6, "Minimum 6 characters").required("Password is required"),
 });
 
 const Login = () => {

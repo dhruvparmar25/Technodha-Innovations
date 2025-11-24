@@ -2,18 +2,20 @@ import React, { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
-import * as Yup from "Yup";
+import * as yup from "yup";
 
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
 
 // Validation
-const PasswordSchema = Yup.object().shape({
-    newPassword: Yup.string()
+const PasswordSchema = yup.object().shape({
+    newPassword: yup
+        .string()
         .min(6, "Password must be minimum 6 characters")
         .required("New password is required"),
-    confirmPassword: Yup.string()
-        .oneOf([Yup.ref("newPassword"), null], "Passwords do not match")
+    confirmPassword: yup
+        .string()
+        .oneOf([yup.ref("newPassword"), null], "Passwords do not match")
         .required("Confirm password is required"),
 });
 

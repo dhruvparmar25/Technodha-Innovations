@@ -1,13 +1,13 @@
 import api from "../api/axiosClient";
 
-// 1) Register User
+// Register user
 export const registerUser = (payload) => api.post("/v1/users/", payload);
 
-// 2) Verify OTP
+// Verify OTP
 export const verifyOtp = (userId, payload) => api.post(`/v1/users/${userId}/verify-otp/`, payload);
 
-// 3) Login
+// Login user and get tokens
 export const loginUser = (payload) => api.post("/v1/users/login/", payload);
 
-// 4) Create Doctor
+// Create doctor (requires auth token)
 export const createDoctor = (payload) => api.post("/v1/doctors/", payload);

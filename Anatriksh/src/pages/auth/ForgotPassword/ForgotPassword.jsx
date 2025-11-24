@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
-import * as Yup from "Yup";
+import * as yup from "yup";
 
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
@@ -13,8 +13,8 @@ const ForgotPassword = () => {
     const [alert, setAlert] = useState({ type: "", message: "" });
 
     // Validation
-    const ForgotSchema = Yup.object().shape({
-        email: Yup.string().email("Invalid email format").required("Email is required"),
+    const ForgotSchema = yup.object().shape({
+        email: yup.string().email("Invalid email format").required("Email is required"),
     });
 
     // Submit

@@ -1,40 +1,43 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Formik } from "formik";
-import * as Yup from "Yup";
+import * as yup from "yup";
 import { NavLink, useNavigate, useParams, useLocation } from "react-router-dom";
 
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
 import { verifyOtp } from "../../../services/authService";
 
-// Validation
-const OtpSchema = Yup.object().shape({
-    otp: Yup.string()
+// OTP Validation
+const OtpSchema = yup.object({
+    otp: yup
+        .string()
         .matches(/^[0-9]{6}$/, "Enter a valid 6-digit OTP")
         .required("OTP is required"),
 });
 
 const OtpVerification = () => {
     const [email, setEmail] = useState("");
-
-    useEffect(() => {
-        const forgotEmail = localStorage.getItem("forgot_email");
-        const signupEmail = localStorage.getItem("signup_email");
-        setEmail(forgotEmail || signupEmail || "");
-    }, []);
-
     const navigate = useNavigate();
-    const { id } = useParams(); // only for signup
+    const { id } = useParams();
     const location = useLocation();
 
     const inputRefs = useRef([]);
     const [alert, setAlert] = useState({ type: "", message: "" });
 
-    // Mode detection
     const isSignup = location.pathname.includes("/signup");
     const isForgot = location.pathname.includes("/forgot");
 
-    // For signup: ensure ID exists
+    useEffect(() => {
+        const forgotEmail = localStorage.getItem("forgot_email");
+        const signupEmail = localStorage.getItem("signup_email");
+
+        if (isSignup) {
+            setEmail(signupEmail || "");
+        } else if (isForgot) {
+            setEmail(forgotEmail || "");
+        }
+    }, [isSignup, isForgot]);
+
     useEffect(() => {
         if (isSignup && !id) {
             const saved = localStorage.getItem("signup_user_id");
@@ -42,41 +45,34 @@ const OtpVerification = () => {
         }
     }, [id, isSignup, navigate]);
 
-    // Handle OTP input box logic
     const handleInputChange = (value, index, otp, setFieldValue) => {
         if (/^[0-9]?$/.test(value)) {
             const newOtp = otp.split("");
             newOtp[index] = value;
-            const updatedOtp = newOtp.join("");
+            const updated = newOtp.join("");
 
-            setFieldValue("otp", updatedOtp);
+            setFieldValue("otp", updated);
 
             if (value && index < 5) inputRefs.current[index + 1].focus();
         }
     };
 
-    // Submit OTP
     const handleSubmitOtp = async (values) => {
         try {
             const otp = values.otp;
 
-            // ===== SIGNUP OTP VERIFY =====
             if (isSignup) {
                 if (!id) throw new Error("Invalid user ID");
 
                 await verifyOtp(id, { otp });
 
                 setAlert({ type: "success", message: "OTP Verified Successfully!" });
-
                 setTimeout(() => navigate("/signup/step2"), 1200);
                 return;
             }
 
-            // ===== FORGOT PASSWORD OTP VERIFY =====
             if (isForgot) {
-                // TODO: use your forgot-password API here later
                 setAlert({ type: "success", message: "OTP Verified Successfully!" });
-
                 setTimeout(() => navigate("/forgot/create-new-password"), 1200);
                 return;
             }
@@ -94,9 +90,8 @@ const OtpVerification = () => {
     return (
         <AuthLayout
             title={isSignup ? "Verify Your Email" : "Verify OTP"}
-            subtitle="Enter the 6-digit OTP we’ve sent to your email:"
+            subtitle="Enter the 6-digit OTP sent to your email:"
         >
-            {/* Alert */}
             {alert.message && (
                 <AlertBox
                     type={alert.type}
@@ -104,7 +99,8 @@ const OtpVerification = () => {
                     onClose={() => setAlert({ type: "", message: "" })}
                 />
             )}
-            <div className="email">
+
+            <div className="email-display">
                 <a href="#">{email}</a>
             </div>
 
@@ -115,15 +111,7 @@ const OtpVerification = () => {
             >
                 {({ values, errors, touched, handleSubmit, setFieldValue }) => (
                     <form onSubmit={handleSubmit}>
-                        {/* OTP input boxes */}
-                        <div
-                            style={{
-                                display: "flex",
-                                gap: "40px",
-                                marginTop: "35px",
-                                marginBottom: "12px",
-                            }}
-                        >
+                        <div className="otp-container">
                             {[0, 1, 2, 3, 4, 5].map((index) => (
                                 <input
                                     key={index}
@@ -144,29 +132,22 @@ const OtpVerification = () => {
                             ))}
                         </div>
 
-                        {/* Error text */}
                         {errors.otp && touched.otp && (
-                            <p className="validation-error" style={{ textAlign: "center" }}>
-                                {errors.otp}
-                            </p>
+                            <p className="validation-error">{errors.otp}</p>
                         )}
 
-                        <div style={{ marginTop: "10px", textAlign: "center" }}>
+                        <div className="resend-text">
                             Didn't receive the code?
-                            <NavLink to="#" style={{ color: "var(--color-primary)" }}>
+                            <NavLink to="#" className="resend-link">
                                 Resend OTP
                             </NavLink>
                         </div>
 
-                        <button
-                            type="submit"
-                            className="submit-button"
-                            style={{ marginTop: "20px" }}
-                        >
+                        <button type="submit" className="submit-button">
                             Verify OTP
                         </button>
 
-                        <div className="secondary-button" style={{ textAlign: "center" }}>
+                        <div className="back-login">
                             <NavLink to="/login">Back to Login</NavLink>
                         </div>
                     </form>

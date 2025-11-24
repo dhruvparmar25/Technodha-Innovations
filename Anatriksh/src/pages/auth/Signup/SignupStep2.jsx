@@ -6,21 +6,21 @@ import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
 
 import { loginUser, createDoctor } from "../../../services/authService";
+import { specializationOptions } from "../../../data/specializations";
+import Select from "react-select";
 
 const SignupStep2 = () => {
     const navigate = useNavigate();
 
-    // Load Step1 stored data
+    // Step 1 stored data (email + password)
     const [step1Data, setStep1Data] = useState(null);
 
     useEffect(() => {
         const saved = localStorage.getItem("signupStep1");
-        if (saved) {
-            setStep1Data(JSON.parse(saved));
-        }
+        if (saved) setStep1Data(JSON.parse(saved));
     }, []);
 
-    // Step2 form values
+    // Form state
     const [form, setForm] = useState({
         name: "",
         specialization: "",
@@ -33,25 +33,27 @@ const SignupStep2 = () => {
     const [alert, setAlert] = useState({ type: "", message: "" });
     const [loading, setLoading] = useState(false);
 
-    // Validate fields
+    // Basic field validation
     const validate = () => {
         let e = {};
         if (!form.name.trim()) e.name = "Name required";
         if (!form.specialization) e.specialization = "Select specialization";
         if (!form.clinic.trim()) e.clinic = "Clinic required";
         if (!/^[0-9]{10}$/.test(form.contact)) e.contact = "10-digit mobile required";
-
         setErrors(e);
         return Object.keys(e).length === 0;
     };
 
-    // Submit profile + API calls
+    // Handle submit: login (to get token) → create doctor profile
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validate()) return;
 
         if (!step1Data) {
-            setAlert({ type: "error", message: "Signup step 1 data missing. Please start again." });
+            setAlert({
+                type: "error",
+                message: "Signup step 1 data missing. Please start again.",
+            });
             return;
         }
 
@@ -59,23 +61,20 @@ const SignupStep2 = () => {
             setLoading(true);
             setAlert({});
 
-            // 1️⃣ LOGIN to fetch tokens
+            // Step 1: Login to get tokens
             const loginRes = await loginUser({
                 email: step1Data.email,
                 password: step1Data.password,
             });
 
-            if (!loginRes.data?.data) {
-                throw new Error("Invalid login response");
-            }
-
-            const userData = loginRes.data.data;
+            const userData = loginRes.data?.data;
+            if (!userData) throw new Error("Invalid login response");
 
             // Save tokens
             localStorage.setItem("access_token", userData.access_token);
             localStorage.setItem("refresh_token", userData.refresh_token);
 
-            // Save user info
+            // Save basic user info
             localStorage.setItem(
                 "user",
                 JSON.stringify({
@@ -85,12 +84,13 @@ const SignupStep2 = () => {
                 })
             );
 
-            // 2️⃣ CREATE DOCTOR PROFILE (AUTH REQUIRED)
+            // Step 2: Create doctor profile
             const payload = {
                 name: form.name,
                 specialty: form.specialization,
                 contact_number: form.contact,
                 hospital: form.clinic,
+                license_number: form.licenseNumber || null,
             };
 
             const doctorRes = await createDoctor(payload);
@@ -117,7 +117,7 @@ const SignupStep2 = () => {
 
     return (
         <AuthLayout>
-            {/* Alert */}
+            {/* Alert Notification */}
             {alert.message && (
                 <AlertBox
                     type={alert.type}
@@ -158,21 +158,21 @@ const SignupStep2 = () => {
                     />
                     {errors.name && <p className="validation-error">{errors.name}</p>}
                 </div>
-
                 {/* Specialization */}
                 <div className="form-group">
                     <label>Specialization</label>
-                    <select
-                        className="form-input"
-                        name="specialization"
-                        value={form.specialization}
-                        onChange={(e) => setForm({ ...form, specialization: e.target.value })}
-                    >
-                        <option value="">Select specialization</option>
-                        <option value="Cardiology">Cardiology</option>
-                        <option value="Neurology">Neurology</option>
-                        <option value="Dermatology">Dermatology</option>
-                    </select>
+
+                    <Select
+                        className="react-select-container"
+                        classNamePrefix="react-select"
+                        options={specializationOptions}
+                        placeholder="Select specialization"
+                        isSearchable={true}
+                        onChange={(option) =>
+                            setForm({ ...form, specialization: option?.value || "" })
+                        }
+                    />
+
                     {errors.specialization && (
                         <p className="validation-error">{errors.specialization}</p>
                     )}
@@ -191,7 +191,7 @@ const SignupStep2 = () => {
                     {errors.clinic && <p className="validation-error">{errors.clinic}</p>}
                 </div>
 
-                {/* License Number */}
+                {/* License Number (optional) */}
                 <div className="form-group">
                     <label>License Number (Optional)</label>
                     <input
@@ -216,8 +216,8 @@ const SignupStep2 = () => {
                     {errors.contact && <p className="validation-error">{errors.contact}</p>}
                 </div>
 
-                {/* Save */}
-                <button className="submit-button" disabled={loading}>
+                {/* Save Button */}
+                <button type="submit" className="submit-button" disabled={loading}>
                     {loading ? "Saving..." : "Save Profile"}
                 </button>
             </form>

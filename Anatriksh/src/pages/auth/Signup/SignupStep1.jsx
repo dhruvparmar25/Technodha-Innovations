@@ -4,15 +4,16 @@ import { useNavigate } from "react-router-dom";
 import AuthLayout from "../../../components/auth/AuthLayout";
 import AlertBox from "../../../components/common/AlertBox";
 import { Formik } from "formik";
-import * as Yup from "Yup";
+import * as yup from "yup";
 import { registerUser } from "../../../services/authService";
 
-// Validation
-const SignupStep1Schema = Yup.object().shape({
-    email: Yup.string().email("Invalid email").required("Email is required"),
-    createPassword: Yup.string().min(6, "Minimum 6 characters").required("Password is required"),
-    confirmPassword: Yup.string()
-        .oneOf([Yup.ref("createPassword")], "Passwords do not match")
+// Validation Schema
+const SignupStep1Schema = yup.object({
+    email: yup.string().email("Invalid email").required("Email is required"),
+    createPassword: yup.string().min(6, "Minimum 6 characters").required("Password is required"),
+    confirmPassword: yup
+        .string()
+        .oneOf([yup.ref("createPassword")], "Passwords do not match")
         .required("Confirm your password"),
 });
 
@@ -20,10 +21,11 @@ const SignupStep1 = () => {
     const navigate = useNavigate();
     const [alert, setAlert] = useState({ type: "", message: "" });
 
-    // password visibility
+    // Password visibility toggle
     const [show, setShow] = useState({ create: false, confirm: false });
-    const toggle = (f) => setShow((p) => ({ ...p, [f]: !p[f] }));
+    const toggle = (field) => setShow((prev) => ({ ...prev, [field]: !prev[field] }));
 
+    // Submit Step 1
     const handleSubmitStep1 = async (values) => {
         setAlert({ type: "", message: "" });
 
@@ -37,37 +39,41 @@ const SignupStep1 = () => {
             const res = await registerUser(payload);
             const userId = res.data.id;
 
-            // SUCCESS RESPONSE → BACKEND DETAIL USE KARO
+            // Save required data for OTP screen
+            localStorage.setItem("signup_email", values.email);
+            localStorage.setItem(
+                "signupStep1",
+                JSON.stringify({
+                    email: values.email,
+                    password: values.createPassword,
+                })
+            );
+            localStorage.setItem("signup_user_id", userId);
+
+            // Success alert
             setAlert({
                 type: "success",
                 message: res.data?.detail || "Account created! Verify OTP.",
             });
-            // Save email for OTP screen
-            localStorage.setItem("signup_email", values.email);
-            // store for step2
-            localStorage.setItem(
-                "signupStep1",
-                JSON.stringify({ email: values.email, password: values.createPassword })
-            );
-            localStorage.setItem("signup_user_id", userId);
 
             setTimeout(() => navigate(`/signup/verify/${userId}`), 900);
         } catch (err) {
-            // ERROR RESPONSE → BACKEND DETAIL FIRST PRIORITY
+            // Backend error priority
             setAlert({
                 type: "error",
                 message:
-                    err.response?.data?.detail || // backend detail
-                    err.response?.data?.message || // backend message
-                    err.response?.data || // full backend response if string
-                    err.message || // JS error
-                    "Registration failed", // fallback
+                    err.response?.data?.detail ||
+                    err.response?.data?.message ||
+                    (Object.values(err.response?.data || {})[0] ?? null) ||
+                    err.message ||
+                    "Registration failed",
             });
         }
     };
 
     return (
         <AuthLayout>
+            {/* Alert Notification */}
             {alert.message && (
                 <AlertBox
                     type={alert.type}
@@ -87,23 +93,25 @@ const SignupStep1 = () => {
             >
                 {({ values, errors, touched, handleChange, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
-                        {/* Header */}
+                        {/* Step Header */}
                         <div className="step-indicator">
                             <div className="back-arrow" onClick={() => navigate("/login")}>
                                 <FaAngleLeft size={20} color="#7C3AED" />
                             </div>
                             <p>Step 1 of 2 — Basic Details</p>
+
                             <div className="progress-bar-container">
                                 <div className="progress-bar step-1"></div>
                             </div>
                         </div>
 
+                        {/* Title */}
                         <div className="form-title">
                             <h1>Create Your Doctor Account</h1>
                             <p>Join our platform to connect with patients securely</p>
                         </div>
 
-                        {/* EMAIL */}
+                        {/* Email */}
                         <div className="form-group">
                             <label>Email</label>
                             <input
@@ -118,7 +126,7 @@ const SignupStep1 = () => {
                             )}
                         </div>
 
-                        {/* PASSWORD */}
+                        {/* Create Password */}
                         <div className="form-group">
                             <label>Create Password</label>
                             <div className="input-with-icon-container">
@@ -143,7 +151,7 @@ const SignupStep1 = () => {
                             )}
                         </div>
 
-                        {/* CONFIRM PASSWORD */}
+                        {/* Confirm Password */}
                         <div className="form-group">
                             <label>Confirm Password</label>
                             <div className="input-with-icon-container">
@@ -168,7 +176,10 @@ const SignupStep1 = () => {
                             )}
                         </div>
 
-                        <button className="submit-button">Continue</button>
+                        {/* Submit */}
+                        <button type="submit" className="submit-button">
+                            Continue
+                        </button>
                     </form>
                 )}
             </Formik>
