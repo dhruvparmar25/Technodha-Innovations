@@ -1,4 +1,5 @@
 import React from "react";
+import { IoIosNotificationsOutline } from "react-icons/io";
 
 function DashboardHeader() {
     return (
@@ -8,8 +9,9 @@ function DashboardHeader() {
             </div>
 
             <div className="header-right">
-                <img src="/Notification-icon.png" className="notification" />
-
+                <div className="notification">
+                    <IoIosNotificationsOutline />
+                </div>
                 <div className="user">
                     <img src="/user-icon.png" className="user-img" />
                     <div className="user-info">

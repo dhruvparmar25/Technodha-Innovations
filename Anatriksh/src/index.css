@@ -335,7 +335,6 @@ a,
     position: fixed;
     top: 0;
     left: 0;
-    background: white;
     border-bottom: 1px solid var(--color-border);
     padding: 20px 50px;
     display: flex;
@@ -343,11 +342,29 @@ a,
     align-items: center;
     z-index: 1000;
 }
-
+.user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
 .header-right {
     display: flex;
     align-items: center;
     gap: 35px;
+}
+.notification {
+    width: 37.82942199707031px;
+    height: 37.82942199707031px;
+    background: #06b6d426;
+    color: var(--color-text-secondary);
+    border-radius: 50%;
+    margin: auto;
+}
+.notification svg {
+    width: 30px;
+    height: 30px;
+    margin: 3px;
 }
 
 .user-info h5,
@@ -365,30 +382,69 @@ a,
     color: var(--color-text-secondary);
 }
 
-/* ----------------------------------
-   SIDEBAR
----------------------------------- */
+/* ------------------------- */
+/* BASE SIDEBAR (Default)   */
+/* ------------------------- */
 .sidebar {
     position: fixed;
     top: 120px;
     left: 0;
-    width: 20%;
+    width: 345px; /* Desktop default */
     height: calc(100vh - 120px);
-    background: var(--color-background);
+    background: #ffffff;
     border-right: 1px solid var(--color-border);
-    padding-top: 20px;
+    padding: 25px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transition: 0.3s ease;
 }
 
+/* List reset */
+.sidebar ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+/* ------------------------- */
+/* NAV ITEM STYLE           */
+/* ------------------------- */
 .nav-item {
-    display: block;
-    padding: 15px 20px;
-    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    font-size: 16px;
     color: var(--color-text-primary);
+    text-decoration: none;
+    border-radius: 8px;
+    margin: 4px 36px;
+    transition: 0.25s;
+}
+
+.nav-item .icon {
+    font-size: 20px;
+    color: var(--color-text-secondary);
+}
+
+.nav-item:hover {
+    background: #f3edff;
+    color: var(--color-primary);
+}
+
+.nav-item:hover .icon {
+    color: var(--color-primary);
 }
 
 .nav-item.active {
-    background: var(--color-border);
-    font-weight: bold;
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 600;
+}
+
+.nav-item.active .icon {
+    color: #fff;
 }
 
 /* ----------------------------------
@@ -397,8 +453,8 @@ a,
 .content-area {
     position: absolute;
     top: 120px;
-    left: 20%;
-    width: 80%;
+    left: 345px;
+    width: -webkit-fill-available;
     height: calc(100vh - 120px);
     overflow-y: auto;
     padding: 20px;
@@ -596,30 +652,19 @@ a,
         gap: 15px;
     }
 
-    /* SIDEBAR → COLLAPSE ON MOBILE */
     .sidebar {
-        width: 230px;
+        width: 230px !important;
         left: -230px;
-        transition: 0.3s;
         z-index: 2000;
-        position: fixed;
+        top: 80px; /* Your mobile header height */
     }
-
     .sidebar.open {
-        left: 0;
+        left: 0; /* Slide in */
     }
-
-    /* CONTENT FULL WIDTH */
     .content-area {
-        width: 100%;
-        left: 0;
+        margin-left: 0 !important;
         padding: 15px;
-        top: 80px;
-    }
-
-    /* NAV ITEMS */
-    .nav-item {
-        font-size: 16px;
+        width: 100%;
     }
 }
 
@@ -646,42 +691,41 @@ a,
         font-size: 30px;
     }
 
-    /* DASHBOARD */
     .sidebar {
-        width: 200px;
+        width: 80px !important;
     }
-
     .content-area {
-        left: 200px;
-        width: calc(100% - 200px);
+        margin-left: 80px !important;
     }
-}
+    .nav-item span {
+        display: none; /* hide titles */
+    }
+    .nav-item .icon {
+        margin: 0 auto;
+        font-size: 22px;
+    }
 
-/* ==================================
+    /* ==================================
    SMALL LAPTOP 1024px–1280px
 ================================== */
-@media (min-width: 1025px) and (max-width: 1280px) {
-    /* SIDEBAR */
-    .sidebar {
-        width: 18%;
+    @media (min-width: 1025px) and (max-width: 1279px) {
+        .sidebar {
+            width: 280px !important;
+        }
+        .content-area {
+            margin-left: 280px !important;
+        }
     }
 
-    /* CONTENT */
-    .content-area {
-        left: 18%;
-        width: 82%;
-    }
-}
-
-/* ==================================
+    /* ==================================
    LARGE DESKTOP ≥ 1280px
 ================================== */
-@media (min-width: 1281px) {
-    .sidebar {
-        width: 20%;
-    }
-    .content-area {
-        left: 20%;
-        width: 80%;
+    @media (min-width: 1280px) {
+        .sidebar {
+            width: 345px !important;
+        }
+        .content-area {
+            margin-left: 345px !important;
+        }
     }
 }

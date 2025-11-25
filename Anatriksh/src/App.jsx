@@ -12,15 +12,16 @@ import DashboardLayout from "./components/dashboard/layout/DashboardLayout";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import CreateNewPassword from "./pages/auth/forgotPassword/CreateNewPassword";
 import SignupSuccess from "./pages/auth/signup/SignupSuccess";
+import Patients from "./pages/dashboard/Patients";
+import AccessRequest from "./pages/dashboard/AccessRequest";
+import Setting from "./pages/dashboard/Setting";
+import Notifications from "./pages/dashboard/Notifications";
+import Reports from "./pages/dashboard/Reports";
+import LabOrders from "./pages/dashboard/LabOrders";
 
 function App() {
     return (
         <Routes>
-            {/* Protected dashboard */}
-            <Route element={<DashboardLayout />}>
-                <Route path="/dashboard" element={<DashboardHome />} />
-            </Route>
-
             {/* Redirect root */}
             <Route path="/" element={<Navigate to="/login" replace />} />
 
@@ -38,6 +39,17 @@ function App() {
             <Route path="/forgot/verify-otp" element={<OtpVerification />} />
             <Route path="/forgot/create-new-password" element={<CreateNewPassword />} />
             <Route path="/forgot/success" element={<PasswordSuccess />} />
+
+            {/* Dashboard */}
+            <Route element={<DashboardLayout />}>
+                <Route path="/dashboard" element={<DashboardHome />} />
+                <Route path="/patients" element={<Patients />} />
+                <Route path="/lab-orders" element={<LabOrders />} />
+                <Route path="/reports" element={<Reports />} />
+                <Route path="/notifications" element={<Notifications />} />
+                <Route path="/settings" element={<Setting />} />
+                <Route path="/access-requests" element={<AccessRequest />} />
+            </Route>
         </Routes>
     );
 }
